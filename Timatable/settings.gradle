@@ -1,0 +1,5 @@
+include ':app'
+rootProject.name = "Timatable"
+include ':Mintable'
+project(':Mintable').projectDir = new File(settingsDir,'../MinTable')
+include ':Mintable:app'
