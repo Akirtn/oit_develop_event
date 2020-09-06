@@ -1,5 +1,6 @@
 package com.example.timatable
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,59 +15,62 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private val day = arrayOf("月", "火", "水", "木", "金")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
-    val schedule = ScheduleEntity(
-        32, //originId
-        "データベース", //scheduleName
-        "1401", //roomInfo
-        ScheduleDay.MONDAY, //ScheduleDay object (MONDAY ~ SUNDAY)
-        "1:00", //startTime format: "HH:mm"
-        "2:00", //endTime  format: "HH:mm"
-        "#73fcae68", //backgroundColor (optional)
-        "#000000" //textcolor (optional)
-    )
 
+    //Mintableを初期化
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        //scheduleList.add(schedule)
+        table.baseSetting(20, 30, 100)
+        super.onWindowFocusChanged(hasFocus)
+        table.initTable(day)
+        table.updateSchedules(scheduleList)
+
+    }
+
+    var global_scheduleDay = 0
+    var global_time = 0
+
+    //クリックされると入力画面に遷移する
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         table.setOnTimeCellClickListener(object : OnTimeCellClickListener {
             override fun timeCellClicked(scheduleDay: Int, time: Int) {
-                //do something
-                Log.v("test","test")
-                Log.v("scheduleDay",scheduleDay.toString())
-                Log.v("time",time.toString())
+                //onActivityResultにsheduleDayとtimeを渡すためにグローバル変数に代入
+                global_scheduleDay = scheduleDay
+                global_time = time
+                //入力画面に遷移
+                val intent = Intent(this@MainActivity,InputScreen::class.java)
+                startActivityForResult(intent,1000)
 
-
-                val schedule2 = ScheduleEntity(
-                    scheduleDay * time, //originId
-                    "データベース", //scheduleName
-                    "1401", //roomInfo
-                    scheduleDay, //ScheduleDay object (MONDAY ~ SUNDAY)
-                    time.toString() + ":00", //startTime format: "HH:mm"
-                    (time + 1).toString()+":00", //endTime  format: "HH:mm"
-                    "#73fcae68", //backgroundColor (optional)
-                    "#000000" //textcolor (optional)
-                )
-
-                scheduleList.add(schedule2)
-                //onWindowFocusChanged(hasFocus)
-                table.updateSchedules(scheduleList)
             }
         })
     }
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        scheduleList.add(schedule)
-        table.baseSetting(20, 30, 100)
-        super.onWindowFocusChanged(hasFocus)
-        table.initTable(day)
-        table.updateSchedules(scheduleList)
 
-        Log.v("test","test")
+    //入力画面から遷移すると動作する関数
+    //科目名が入力されている場合のみスケジュール一覧に追加する
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (resultCode == RESULT_OK && null != intent) {
+            val subject_name = intent.getStringExtra("subject_name")
+            val class_number = intent.getStringExtra("class_number")
 
-        schedule.setOnClickListener(View.OnClickListener {
-            //do something
-            Log.v("test","test")
-        })
+            //科目内容設定
+            val schedule = ScheduleEntity(
+                global_scheduleDay * global_time, //originId
+                subject_name.toString(), //scheduleName
+                class_number.toString(), //roomInfo
+                global_scheduleDay, //ScheduleDay object (MONDAY ~ SUNDAY)
+                global_time.toString() + ":00", //startTime format: "HH:mm"
+                (global_time + 1).toString()+":00", //endTime  format: "HH:mm"
+                "#73fcae68", //backgroundColor (optional)
+                "#000000" //textcolor (optional)
+            )
 
+            scheduleList.add(schedule)
+            table.updateSchedules(scheduleList)
+        }
     }
+
+
 }
