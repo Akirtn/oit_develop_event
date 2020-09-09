@@ -1,6 +1,8 @@
 package com.example.timatable
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,29 +13,44 @@ import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnScheduleLongClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.prefs.Preferences
 
 class MainActivity : AppCompatActivity() {
     private val day = arrayOf("月", "火", "水", "木", "金")
     private val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
-    //Mintableを初期化
+    var global_scheduleDay = 0
+    var global_time = 0
+    //プリファレンスの遅延初期化？
+    lateinit var shardPreferences: SharedPreferences
+    lateinit var shardPrefEditor : SharedPreferences.Editor
+
+    //時間割りのデータを保持するためのインスタンス
+    val timetable_data = TimetableDataManager()
+
+    //画面の変化で動く関数
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        //scheduleList.add(schedule)
-        table.baseSetting(20, 30, 100)
         super.onWindowFocusChanged(hasFocus)
         table.initTable(day)
         table.updateSchedules(scheduleList)
-
     }
 
-    var global_scheduleDay = 0
-    var global_time = 0
 
-    //クリックされると入力画面に遷移する
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //データの保存に使用するプリファレンスの初期化
+        shardPreferences = this.getPreferences(Context.MODE_PRIVATE)
+        shardPrefEditor = shardPreferences.edit()
+
+        //時間割を読み込んでスケジュールリストに追加
+        scheduleList += timetable_data.loadData(shardPreferences,shardPrefEditor)
+
+        //テーブルの初期化設定
+        table.baseSetting(20, 30, 100)
+
+        //クリックされると入力画面に遷移する
         table.setOnTimeCellClickListener(object : OnTimeCellClickListener {
             override fun timeCellClicked(scheduleDay: Int, time: Int) {
                 //onActivityResultにsheduleDayとtimeを渡すためにグローバル変数に代入
@@ -67,8 +84,11 @@ class MainActivity : AppCompatActivity() {
                 "#000000" //textcolor (optional)
             )
 
+            //時間割をプリファレンスに保存する
+            timetable_data.setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString())
+            timetable_data.saveData(shardPreferences,shardPrefEditor)
+
             scheduleList.add(schedule)
-            table.updateSchedules(scheduleList)
         }
     }
 
