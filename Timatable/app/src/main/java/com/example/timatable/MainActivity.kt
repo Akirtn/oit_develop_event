@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var shardPreferences: SharedPreferences
     lateinit var shardPrefEditor : SharedPreferences.Editor
 
+    public
+
     //時間割りのデータを保持するためのインスタンス
     val timetable_data = TimetableDataManager()
 
@@ -62,6 +64,23 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+
+        //スケジュールがクリックされると動作する
+        table.setOnScheduleClickListener(
+            object :OnScheduleClickListener {
+                override fun scheduleClicked(entity: ScheduleEntity) {
+                    val time = entity.startTime.split(":")
+                    global_scheduleDay = entity.scheduleDay
+                    global_time = time[0].toInt()
+
+                    val intent = Intent(this@MainActivity,InputScreen::class.java)
+                    intent.putExtra("subject_name",entity.scheduleName.toString())
+                    intent.putExtra("class_number",entity.roomInfo.toString())
+                    scheduleList.remove(entity)
+                    startActivityForResult(intent,1000)
+                }
+            }
+        )
     }
 
     //入力画面から遷移すると動作する関数
@@ -86,10 +105,11 @@ class MainActivity : AppCompatActivity() {
 
             //時間割をプリファレンスに保存する
             timetable_data.setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString())
-            timetable_data.saveData(shardPreferences,shardPrefEditor)
-
             scheduleList.add(schedule)
+        }else{
+            timetable_data.deleteData(global_scheduleDay,global_time)
         }
+        timetable_data.saveData(shardPreferences,shardPrefEditor)
     }
 
 
