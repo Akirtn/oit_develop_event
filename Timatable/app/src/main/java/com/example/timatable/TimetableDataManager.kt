@@ -27,9 +27,16 @@ class TimetableDataManager : AppCompatActivity() {
         }
     }
 
+    fun deleteData(x:Int, y:Int){
+        if(x < tableX && y < tableY){
+            tableDataArray[x][y-1][0] = ""
+            tableDataArray[x][y-1][1] = ""
+        }
+    }
+
     fun getData(x: Int, y:Int) : ArrayList<String>{
         if(x < tableX && y < tableY){
-            return tableDataArray[x][y]
+            return tableDataArray[x][y-1]
         }else{
             return arrayListOf()
         }
@@ -76,7 +83,7 @@ class TimetableDataManager : AppCompatActivity() {
                         (j+1).toString() + ":00", //startTime format: "HH:mm"
                         (j + 2).toString()+":00", //endTime  format: "HH:mm"
                         "#73fcae68", //backgroundColor (optional)
-                        "#666666" //textcolor (optional)
+                        "#000000" //textcolor (optional)
                     )
                     scheduleList.add(schedule)
                 }
