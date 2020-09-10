@@ -154,7 +154,7 @@ class MinTimeTableView : BaseTimeTable {
         if (super.schedules.size == 0) {
             return
         }
-        super.calculateTime(super.schedules)
+        //super.calculateTime(super.schedules)
 
         com.islandparadise14.mintable.utils.removeViews(
             arrayOf(

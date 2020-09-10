@@ -124,6 +124,7 @@ open class BaseTimeTable : LinearLayout {
     }
 
     protected fun calculateTime (schedules: ArrayList<ScheduleEntity>) {
+        return
         tableStartTime =
             getHour(schedules[0].startTime)
         tableEndTime = 6
