@@ -1,11 +1,10 @@
-package com.example.timatable
+package com.example.timetable
 
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.islandparadise14.mintable.model.ScheduleEntity
 import org.json.JSONArray
-import java.lang.Exception
 
 class TimetableDataManager : AppCompatActivity() {
 
@@ -61,15 +60,20 @@ class TimetableDataManager : AppCompatActivity() {
         for (i in 0 until tableY){
             var loadArrayTwoDimension = ArrayList<ArrayList<String>>()
             for (j in 0 until tableX){
-                var loadArrayOneDimension = ArrayList<String>()
-                val jsonArrayLoad = JSONArray(sharedPreferences.getString("$j,$i", "[]"));
-                for (k in 0 until jsonArrayLoad.length()){
-                    loadArrayOneDimension.add(jsonArrayLoad.get(k).toString())
+                var loadArrayOneDimension = arrayListOf("","")
+                val jsonArrayLoad = JSONArray(sharedPreferences.getString("$j,$i", "[]"))
+                for (k in 0 until cellSize){
+
+                    loadArrayOneDimension[k] = jsonArrayLoad.get(k).toString()
+                }
+                if(jsonArrayLoad.length() < 2){
+                    loadArrayOneDimension.add("")
                 }
                 loadArrayTwoDimension.add(loadArrayOneDimension)
             }
             this.tableDataArray.add(loadArrayTwoDimension)
         }
+
 
         for (i in 0 until tableY){
             for (j in 0 until tableX){
@@ -90,8 +94,6 @@ class TimetableDataManager : AppCompatActivity() {
             }
         }
 
-
-        Log.v("table_array", this.tableDataArray.toString())
         return scheduleList
     }
 }
