@@ -31,25 +31,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    val day = arrayOf("月", "火", "水", "木", "金")
-    val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
-
-    var global_scheduleDay = 0
-    var global_time = 0
-    //プリファレンスの遅延初期化？
-    lateinit var shardPreferences: SharedPreferences
-    lateinit var shardPrefEditor : SharedPreferences.Editor
-
-    //時間割りのデータを保持するためのインスタンス
-    private var timetable_data = TimetableDataManager()
-
     //画面の変化で動く関数
     override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        table.initTable(day)
-        table.updateSchedules(scheduleList)
         Log.v("onWindowFocusChanged","onWindowFocusChanged")
-        //createFlag = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         shardPrefEditor = shardPreferences.edit()
 
         //時間割を読み込んでスケジュールリストに追加
-        scheduleList += timetable_data.loadData(shardPreferences,shardPrefEditor)
+        scheduleList += loadData(shardPreferences,shardPrefEditor)
 
         Log.v("main","end")
 
@@ -100,13 +84,14 @@ class MainActivity : AppCompatActivity() {
             )
 
             //時間割をプリファレンスに保存する
-            timetable_data.setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString())
+            setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString())
             scheduleList.add(schedule)
         }else{
-            timetable_data.deleteData(global_scheduleDay,global_time)
+            deleteData(global_scheduleDay,global_time)
         }
-        timetable_data.saveData(shardPreferences,shardPrefEditor)
+        saveData(shardPreferences,shardPrefEditor)
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -114,48 +99,13 @@ class MainActivity : AppCompatActivity() {
         Log.v("onCreateOption","onCreateOption")
 
 
-        //テーブルの初期化設定
-        table.baseSetting(20, 30, 100)
-
-        table.initTable(day)
-        table.updateSchedules(scheduleList)
-
-        //クリックされると入力画面に遷移する
-        table.setOnTimeCellClickListener(object : OnTimeCellClickListener {
-            override fun timeCellClicked(scheduleDay: Int, time: Int) {
-                //onActivityResultにsheduleDayとtimeを渡すためにグローバル変数に代入
-                global_scheduleDay = scheduleDay
-                global_time = time
-                //入力画面に遷移
-                val intent = Intent(this@MainActivity,InputScreen::class.java)
-                startActivityForResult(intent,1000)
-
-            }
-        })
-
-        //スケジュールがクリックされると動作する
-        table.setOnScheduleClickListener(
-            object : OnScheduleClickListener {
-                override fun scheduleClicked(entity: ScheduleEntity) {
-                    val time = entity.startTime.split(":")
-                    global_scheduleDay = entity.scheduleDay
-                    global_time = time[0].toInt()
-
-                    val intent = Intent(this@MainActivity,InputScreen::class.java)
-                    intent.putExtra("subject_name",entity.scheduleName.toString())
-                    intent.putExtra("class_number",entity.roomInfo.toString())
-                    scheduleList.remove(entity)
-                    startActivityForResult(intent,1000)
-                }
-            }
-        )
-
         return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         Log.v("onSupportNavigate","onSupportNavigate")
+
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
