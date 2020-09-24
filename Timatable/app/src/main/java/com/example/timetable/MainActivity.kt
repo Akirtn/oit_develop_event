@@ -26,6 +26,8 @@ import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
 import kotlinx.android.synthetic.main.fragment_home.table
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,6 +57,20 @@ class MainActivity : AppCompatActivity() {
         //データの保存に使用するプリファレンスの初期化
         shardPreferences = getPreferences(MODE_PRIVATE)
         shardPrefEditor = shardPreferences.edit()
+
+        //csv読み込み
+        val assetManager = resources.assets
+        val inputStream= assetManager.open("syllabus_database_3.csv")
+        //val csvString = inputStream.bufferedReader().use { it.readText() }
+        //Log.v("csv",csvString)
+        val inputStreamReader = InputStreamReader(inputStream)
+        var bufferedReader = BufferedReader(inputStreamReader)
+        var line: String? = bufferedReader.readLine()
+        while (line != null){
+            val rowData = line.split(',')
+            csv_array.add(ArrayList(rowData))
+            line = bufferedReader.readLine()
+        }
 
         //時間割を読み込んでスケジュールリストに追加
         scheduleList += loadData(shardPreferences,shardPrefEditor)

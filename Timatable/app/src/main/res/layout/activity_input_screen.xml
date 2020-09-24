@@ -41,7 +41,13 @@
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/input_screen_button"
+        android:id="@+id/find_syllabus_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="シラバス検索" />
+
+    <Button
+        android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="保存" />

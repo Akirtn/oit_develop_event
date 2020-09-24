@@ -1,16 +1,25 @@
 package com.example.timetable
 
 import android.content.SharedPreferences
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.islandparadise14.mintable.model.ScheduleEntity
 import org.json.JSONArray
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileReader
+import java.nio.charset.Charset
+import java.util.*
+import kotlin.collections.ArrayList
 
 private var tableX = 5
 private var tableY = 6
 private val cellSize = 5
 //時間割のデータを格納する三次元リスト
 private var tableDataArray = ArrayList<ArrayList<ArrayList<String>>>()
+
+var csv_array = ArrayList<ArrayList<String>>()
 
 val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 val day = arrayOf("月", "火", "水", "木", "金")
@@ -21,6 +30,18 @@ var global_time = 0
 //プリファレンスの遅延初期化
 lateinit var shardPreferences: SharedPreferences
 lateinit var shardPrefEditor : SharedPreferences.Editor
+
+
+fun findLink(subject_name:String, teacher_name: String, period: String): String {
+    Log.v("hikisu",subject_name)
+    for (row in csv_array){
+        Log.v("row",row.toString())
+        if (row[0] == subject_name && row[2] == period && row[4] == teacher_name){
+            return row[5]
+        }
+    }
+    return "not found"
+}
 
 fun setData(x: Int, y:Int, subject_name: String, class_number: String,
             teacher_name: String, period: String, syllabus_link: String) : Int{

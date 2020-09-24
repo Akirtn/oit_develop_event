@@ -31,15 +31,17 @@ class InputScreen : AppCompatActivity() {
 
         Linkify.addLinks(syllabus_link_text, Linkify.ALL)
 
-        val delete_button: Button = findViewById(R.id.delete_button)
-        delete_button.setOnClickListener{
-            setResult(Activity.RESULT_CANCELED,intent)
-            finish()
+       //シラバス検索ボタン
+        val find_syllabus_button = findViewById<Button>(R.id.find_syllabus_button)
+        find_syllabus_button.setOnClickListener{
+            syllabus_link_text.text = findLink(subject_name_text.text.toString(),
+                    teacher_name_text.text.toString(), period_text.text.toString())
+            Linkify.addLinks(syllabus_link_text, Linkify.ALL)
         }
 
         //ボタンが押されると入力された値を取得する
-        val button: Button = findViewById(R.id.input_screen_button)
-        button.setOnClickListener{
+        val save_button: Button = findViewById(R.id.save_button)
+        save_button.setOnClickListener{
 
             //科目名が入力されている場合はEditTextを返却、入力されていないときは返却しない
             if(subject_name_text.text.length > 0){
@@ -53,6 +55,13 @@ class InputScreen : AppCompatActivity() {
             }else{
                 setResult(Activity.RESULT_CANCELED,intent)
             }
+            finish()
+        }
+
+        //削除ボタン
+        val delete_button: Button = findViewById(R.id.delete_button)
+        delete_button.setOnClickListener{
+            setResult(Activity.RESULT_CANCELED,intent)
             finish()
         }
     }
