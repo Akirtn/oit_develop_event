@@ -7,25 +7,25 @@
     android:orientation="vertical"
     tools:context=".InputScreen">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/subject_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="科目名" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/class_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="教室番号" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/teacher_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="教員名" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/period"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

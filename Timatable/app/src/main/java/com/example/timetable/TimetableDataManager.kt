@@ -31,6 +31,16 @@ var global_time = 0
 lateinit var shardPreferences: SharedPreferences
 lateinit var shardPrefEditor : SharedPreferences.Editor
 
+fun getColumn(index:Int):ArrayList<String>{
+    var ret = ArrayList<String>()
+    for (row in csv_array){
+        ret.add(row[index])
+    }
+    var set = ret.toSet()
+    ret = ArrayList(set)
+    return ret
+}
+
 
 fun findLink(subject_name:String, teacher_name: String, period: String): String {
     Log.v("hikisu",subject_name)
