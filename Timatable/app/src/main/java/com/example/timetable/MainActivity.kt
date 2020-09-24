@@ -70,6 +70,9 @@ class MainActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK && null != intent) {
             val subject_name = intent.getStringExtra("subject_name")
             val class_number = intent.getStringExtra("class_number")
+            val teacher_name = intent.getStringExtra("teacher_name")
+            val period = intent.getStringExtra("period")
+            val syllabus_link = intent.getStringExtra("syllabus_link")
 
             //科目内容設定
             val schedule = ScheduleEntity(
@@ -84,7 +87,8 @@ class MainActivity : AppCompatActivity() {
             )
 
             //時間割をプリファレンスに保存する
-            setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString())
+            setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString(),
+                    teacher_name.toString(),period.toString(),syllabus_link.toString())
             scheduleList.add(schedule)
         }else{
             deleteData(global_scheduleDay,global_time)
