@@ -5,9 +5,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.util.Linkify
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.util.Log
+import android.widget.*
 
 //入力画面処理
 class InputScreen : AppCompatActivity() {
@@ -15,10 +14,10 @@ class InputScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_screen)
 
-        var subject_name_text = findViewById<EditText>(R.id.subject_name) as EditText
-        var class_number_text = findViewById<EditText>(R.id.class_number) as EditText
-        var teacher_name_text = findViewById<EditText>(R.id.teacher_name) as EditText
-        var period_text = findViewById<EditText>(R.id.period) as EditText
+        var subject_name_text = findViewById<AutoCompleteTextView>(R.id.subject_name) as AutoCompleteTextView
+        var class_number_text = findViewById<AutoCompleteTextView>(R.id.class_number) as AutoCompleteTextView
+        var teacher_name_text = findViewById<AutoCompleteTextView>(R.id.teacher_name) as AutoCompleteTextView
+        var period_text = findViewById<AutoCompleteTextView>(R.id.period) as AutoCompleteTextView
         var syllabus_link_text = findViewById<TextView>(R.id.syllabus_link) as TextView
 
         val intent = getIntent()
@@ -28,6 +27,13 @@ class InputScreen : AppCompatActivity() {
         teacher_name_text.setText(intent.extras?.getString("teacher_name")?:"")
         period_text.setText(intent.extras?.getString("period")?:"")
         syllabus_link_text.setText(intent.extras?.getString("syllabus_link")?:"")
+
+        val subject_name_adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
+        subject_name_text.setAdapter(subject_name_adapter)
+        subject_name_text.setThreshold(1)
+        val teacher_name_adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(4))
+        teacher_name_text.setAdapter(teacher_name_adapter)
+        teacher_name_text.setThreshold(1)
 
         Linkify.addLinks(syllabus_link_text, Linkify.ALL)
 
