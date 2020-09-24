@@ -32,7 +32,6 @@ class HomeFragment : Fragment() {
     homeViewModel =
     ViewModelProviders.of(this).get(HomeViewModel::class.java)
     val root = inflater.inflate(R.layout.fragment_home, container, false)
-    Log.v("home","home")
 
     val t = root.findViewById<MinTimeTableView>(R.id.table)
 
@@ -45,7 +44,7 @@ class HomeFragment : Fragment() {
         //入力画面に遷移
         val intent = Intent(activity,InputScreen::class.java)
         startActivityForResult(intent,1000)
-        Log.v("cellClick",scheduleDay.toString())
+        //Log.v("cellClick",scheduleDay.toString())
       }
     })
 
@@ -57,9 +56,15 @@ class HomeFragment : Fragment() {
           global_scheduleDay = entity.scheduleDay
           global_time = time[0].toInt()
 
+          val cell_data = getData(entity.scheduleDay, time[0].toInt())
+          Log.v("celldata",cell_data.toString())
+
           val intent = Intent(activity,InputScreen::class.java)
           intent.putExtra("subject_name",entity.scheduleName.toString())
           intent.putExtra("class_number",entity.roomInfo.toString())
+          intent.putExtra("teacher_name",cell_data[2])
+          intent.putExtra("period",cell_data[3])
+          intent.putExtra("syllabus_link",cell_data[4])
           scheduleList.remove(entity)
           startActivityForResult(intent,1000)
         }

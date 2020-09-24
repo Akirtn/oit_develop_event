@@ -1,16 +1,25 @@
 package com.example.timetable
 
 import android.content.SharedPreferences
+import android.content.res.AssetManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.islandparadise14.mintable.model.ScheduleEntity
 import org.json.JSONArray
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileReader
+import java.nio.charset.Charset
+import java.util.*
+import kotlin.collections.ArrayList
 
 private var tableX = 5
 private var tableY = 6
-private val cellSize = 2
+private val cellSize = 5
 //時間割のデータを格納する三次元リスト
 private var tableDataArray = ArrayList<ArrayList<ArrayList<String>>>()
+
+var csv_array = ArrayList<ArrayList<String>>()
 
 val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 val day = arrayOf("月", "火", "水", "木", "金")
@@ -18,25 +27,35 @@ val day = arrayOf("月", "火", "水", "木", "金")
 var global_scheduleDay = 0
 var global_time = 0
 
-//プリファレンスの遅延初期化？
+//プリファレンスの遅延初期化
 lateinit var shardPreferences: SharedPreferences
 lateinit var shardPrefEditor : SharedPreferences.Editor
 
-fun setData(x: Int, y:Int, subject_name: String, class_number: String) : Int{
+
+fun findLink(subject_name:String, teacher_name: String, period: String): String {
+    Log.v("hikisu",subject_name)
+    for (row in csv_array){
+        Log.v("row",row.toString())
+        if (row[0] == subject_name && row[2] == period && row[4] == teacher_name){
+            return row[5]
+        }
+    }
+    return "not found"
+}
+
+fun setData(x: Int, y:Int, subject_name: String, class_number: String,
+            teacher_name: String, period: String, syllabus_link: String) : Int{
 
     if (x < tableX && y < tableY){
         tableDataArray[x][y-1][0] = subject_name
         tableDataArray[x][y-1][1] = class_number
-        return 1
-    }else{
+        tableDataArray[x][y-1][2] = teacher_name
+        tableDataArray[x][y-1][3] = period
+        tableDataArray[x][y-1][4] = syllabus_link
+        Log.v("tableDataArray", tableDataArray[x][y-1].toString())
         return 0
-    }
-}
-
-fun deleteData(x:Int, y:Int){
-    if(x < tableX && y < tableY){
-        tableDataArray[x][y-1][0] = ""
-        tableDataArray[x][y-1][1] = ""
+    }else{
+        return 1
     }
 }
 
@@ -48,11 +67,20 @@ fun getData(x: Int, y:Int) : ArrayList<String>{
     }
 }
 
+fun deleteData(x:Int, y:Int){
+    if(x < tableX && y < tableY){
+        for(i in 0 until  cellSize){
+            tableDataArray[x][y-1][i] = ""
+        }
+    }
+}
+
 fun saveData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPreferences.Editor){
     for (i in 0 until tableY){
         for (j in 0 until tableX){
             val table_x_y_data = tableDataArray[i][j]
             val json_array_save = JSONArray(table_x_y_data)
+            //Log.v("table_x_y_data", table_x_y_data.toString())
             sharedPrefEditor.putString("$j,$i", json_array_save.toString())
         }
     }
@@ -63,11 +91,10 @@ fun saveData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
 fun loadData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPreferences.Editor):ArrayList<ScheduleEntity>{
     val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
-    ///var load_array = ArrayList<ArrayList<ArrayList<String>>>()
     for (i in 0 until tableY){
         var loadArrayTwoDimension = ArrayList<ArrayList<String>>()
         for (j in 0 until tableX){
-            var loadArrayOneDimension = arrayListOf("","")
+            var loadArrayOneDimension = arrayListOf("","","","","")
             val jsonArrayLoad = JSONArray(sharedPreferences.getString("$j,$i", "[]"))
             for (k in 0 until jsonArrayLoad.length()){
                 loadArrayOneDimension[k] = jsonArrayLoad.get(k).toString()
@@ -81,7 +108,6 @@ fun loadData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
     for (i in 0 until tableY){
         for (j in 0 until tableX){
             if (tableDataArray[i][j][0] != "" && tableDataArray[i][j][0] != "null"){
-                Log.v("table", tableDataArray[i][j][0].toString())
                 val schedule = ScheduleEntity(
                     j * i, //originId
                     tableDataArray[i][j][0], //scheduleName
