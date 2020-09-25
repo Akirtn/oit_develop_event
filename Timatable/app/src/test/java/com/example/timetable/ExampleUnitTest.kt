@@ -1,4 +1,4 @@
-package com.example.timatable
+package com.example.timetable
 
 import org.junit.Test
 
