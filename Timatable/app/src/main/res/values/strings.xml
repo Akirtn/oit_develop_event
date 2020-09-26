@@ -8,6 +8,6 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">時間割</string>
-    <string name="menu_gallery">バス時刻表</string>
-    <string name="menu_slideshow">バス時刻表</string>
+    <string name="menu_gallery">長尾バス時刻表</string>
+    <string name="menu_slideshow">北山バス時刻表</string>
 </resources>
