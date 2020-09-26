@@ -4,24 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.timetable.R
 
-class SlideshowFragment : Fragment() {
+class KitayamaBusFragment : Fragment() {
 
-  private lateinit var slideshowViewModel: SlideshowViewModel
+  private lateinit var kitayamaBusViewModel: KitayamaBusViewModel
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    slideshowViewModel =
-    ViewModelProviders.of(this).get(SlideshowViewModel::class.java)
-    val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
+    kitayamaBusViewModel =
+    ViewModelProviders.of(this).get(KitayamaBusViewModel::class.java)
+    val root = inflater.inflate(R.layout.fragment_kitayama_bus, container, false)
 
     return root
   }
