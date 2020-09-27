@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.timetable.*
+import com.example.timetable.model.CellDataEntity
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
@@ -30,7 +31,7 @@ class HomeFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View? {
     homeViewModel =
-    ViewModelProviders.of(this).get(HomeViewModel::class.java)
+      ViewModelProviders.of(this).get(HomeViewModel::class.java)
     val root = inflater.inflate(R.layout.fragment_home, container, false)
 
     val t = root.findViewById<MinTimeTableView>(R.id.table)
@@ -39,10 +40,17 @@ class HomeFragment : Fragment() {
       override fun timeCellClicked(scheduleDay: Int, time: Int) {
         Log.v("tag",time.toString())
         //onActivityResultにsheduleDayとtimeを渡すためにグローバル変数に代入
-        global_scheduleDay = scheduleDay
-        global_time = time
+
         //入力画面に遷移
+        val cellData = CellDataEntity(scheduleDay,
+          time,
+          "",
+          "",
+          "",
+          "",
+          "")
         val intent = Intent(activity,InputScreen::class.java)
+        intent.putExtra("cellData",cellData)
         startActivityForResult(intent,1000)
         //Log.v("cellClick",scheduleDay.toString())
       }
@@ -53,18 +61,21 @@ class HomeFragment : Fragment() {
       object : OnScheduleClickListener {
         override fun scheduleClicked(entity: ScheduleEntity) {
           val time = entity.startTime.split(":")
-          global_scheduleDay = entity.scheduleDay
-          global_time = time[0].toInt()
 
           val cell_data = getData(entity.scheduleDay, time[0].toInt())
           Log.v("celldata",cell_data.toString())
 
+          val cellData = CellDataEntity(entity.scheduleDay,
+            time[0].toInt(),
+            entity.scheduleName,
+            entity.roomInfo,
+            cell_data[2],
+            cell_data[3],
+            cell_data[4]
+          )
+
           val intent = Intent(activity,InputScreen::class.java)
-          intent.putExtra("subject_name",entity.scheduleName.toString())
-          intent.putExtra("class_number",entity.roomInfo.toString())
-          intent.putExtra("teacher_name",cell_data[2])
-          intent.putExtra("period",cell_data[3])
-          intent.putExtra("syllabus_link",cell_data[4])
+          intent.putExtra("cellData",cellData)
           scheduleList.remove(entity)
           startActivityForResult(intent,1000)
         }

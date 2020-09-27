@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.text.util.Linkify
 import android.util.Log
 import android.widget.*
+import com.example.timetable.model.CellDataEntity
+import kotlinx.android.synthetic.main.activity_input_screen.*
 
 //入力画面処理
 class InputScreen : AppCompatActivity() {
@@ -21,12 +23,13 @@ class InputScreen : AppCompatActivity() {
         var syllabus_link_text = findViewById<TextView>(R.id.syllabus_link) as TextView
 
         val intent = getIntent()
+        val receiveCellData: CellDataEntity? = intent.getSerializableExtra("cellData") as CellDataEntity
 
-        subject_name_text.setText(intent.extras?.getString("subject_name")?:"")
-        class_number_text.setText(intent.extras?.getString("class_number")?:"")
-        teacher_name_text.setText(intent.extras?.getString("teacher_name")?:"")
-        period_text.setText(intent.extras?.getString("period")?:"")
-        syllabus_link_text.setText(intent.extras?.getString("syllabus_link")?:"")
+        subject_name_text.setText(receiveCellData?.subjectName)
+        class_number_text.setText(receiveCellData?.classNumber)
+        teacher_name_text.setText(receiveCellData?.teacherName)
+        period_text.setText(receiveCellData?.period)
+        syllabus_link_text.setText(receiveCellData?.syllabus_link)
 
         val subject_name_adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
         subject_name_text.setAdapter(subject_name_adapter)
@@ -37,13 +40,16 @@ class InputScreen : AppCompatActivity() {
 
         Linkify.addLinks(syllabus_link_text, Linkify.ALL)
 
-       //シラバス検索ボタン
+        //シラバス検索ボタン
         val find_syllabus_button = findViewById<Button>(R.id.find_syllabus_button)
         find_syllabus_button.setOnClickListener{
             syllabus_link_text.text = findLink(subject_name_text.text.toString(),
-                    teacher_name_text.text.toString(), period_text.text.toString())
+                teacher_name_text.text.toString(), period_text.text.toString())
             Linkify.addLinks(syllabus_link_text, Linkify.ALL)
         }
+
+        intent.putExtra("cellData", receiveCellData)
+        setResult(Activity.RESULT_OK,intent)
 
         //ボタンが押されると入力された値を取得する
         val save_button: Button = findViewById(R.id.save_button)
@@ -51,13 +57,22 @@ class InputScreen : AppCompatActivity() {
 
             //科目名が入力されている場合はEditTextを返却、入力されていないときは返却しない
             if(subject_name_text.text.length > 0){
-                val intent = Intent(this,InputScreen::class.java)
-                intent.putExtra("subject_name",subject_name_text.text.toString())
-                intent.putExtra("class_number",class_number_text.text.toString())
-                intent.putExtra("teacher_name",teacher_name_text.text.toString())
-                intent.putExtra("period", period_text.text.toString())
-                intent.putExtra("syllabus_link", syllabus_link_text.text.toString())
-                setResult(Activity.RESULT_OK,intent)
+                if(receiveCellData != null){
+                    val sendCellData = CellDataEntity(receiveCellData.x,
+                        receiveCellData.y,
+                        subject_name_text.text.toString(),
+                        class_number_text.text.toString(),
+                        teacher_name_text.text.toString(),
+                        period_text.text.toString(),
+                        syllabus_link.text.toString()
+                    )
+
+                    intent.putExtra("cellData", sendCellData)
+                    setResult(Activity.RESULT_OK,intent)
+                }
+
+                //val intent = Intent(this,InputScreen::class.java)
+
             }else{
                 setResult(Activity.RESULT_CANCELED,intent)
             }

@@ -24,8 +24,6 @@ var csv_array = ArrayList<ArrayList<String>>()
 val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 val day = arrayOf("月", "火", "水", "木", "金")
 
-var global_scheduleDay = 0
-var global_time = 0
 
 //プリファレンスの遅延初期化
 lateinit var shardPreferences: SharedPreferences
