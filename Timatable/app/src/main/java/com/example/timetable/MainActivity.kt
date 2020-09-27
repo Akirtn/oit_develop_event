@@ -1,14 +1,8 @@
 package com.example.timetable
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.Menu
-import android.view.View
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,25 +12,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import com.example.timetable.ui.home.HomeFragment
-import com.islandparadise14.mintable.MinTimeTableView
+import com.example.timetable.model.CellDataEntity
 import com.islandparadise14.mintable.model.ScheduleEntity
-import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
-import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
-import kotlinx.android.synthetic.main.fragment_home.table
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    //画面の変化で動く関数
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        Log.v("onWindowFocusChanged","onWindowFocusChanged")
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,39 +58,42 @@ class MainActivity : AppCompatActivity() {
         //時間割を読み込んでスケジュールリストに追加
         scheduleList += loadData(shardPreferences,shardPrefEditor)
 
-        Log.v("main","end")
-
     }
 
     //入力画面から遷移すると動作する関数
     //科目名が入力されている場合のみスケジュール一覧に追加する
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
-        if (resultCode == RESULT_OK && null != intent) {
-            val subject_name = intent.getStringExtra("subject_name")
-            val class_number = intent.getStringExtra("class_number")
-            val teacher_name = intent.getStringExtra("teacher_name")
-            val period = intent.getStringExtra("period")
-            val syllabus_link = intent.getStringExtra("syllabus_link")
+        val cellData: CellDataEntity? = intent?.getSerializableExtra("cellData") as CellDataEntity
+        if (resultCode == Activity.RESULT_OK) {
 
-            //科目内容設定
-            val schedule = ScheduleEntity(
-                global_scheduleDay * global_time, //originId
-                subject_name.toString(), //scheduleName
-                class_number.toString(), //roomInfo
-                global_scheduleDay, //ScheduleDay object (MONDAY ~ SUNDAY)
-                global_time.toString() + ":00", //startTime format: "HH:mm"
-                (global_time + 1).toString()+":00", //endTime  format: "HH:mm"
-                "#73fcae68", //backgroundColor (optional)
-                "#000000" //textcolor (optional)
-            )
+            if (cellData != null && cellData.subjectName.length > 0){
+                val subject_name = cellData.subjectName
+                val class_number = cellData.classNumber
+                val teacher_name = cellData.teacherName
+                val period = cellData.period
+                val syllabus_link = cellData.syllabus_link
 
-            //時間割をプリファレンスに保存する
-            setData(global_scheduleDay,global_time,subject_name.toString(),class_number.toString(),
+                //科目内容設定
+                val schedule = ScheduleEntity(
+                    cellData.x * cellData.y, //originId
+                    cellData.subjectName, //scheduleName
+                    cellData.classNumber, //roomInfo
+                    cellData.x, //ScheduleDay object (MONDAY ~ SUNDAY)
+                    cellData.y.toString() + ":00", //startTime format: "HH:mm"
+                    (cellData.y + 1).toString()+":00", //endTime  format: "HH:mm"
+                    "#73fcae68", //backgroundColor (optional)
+                    "#000000" //textcolor (optional)
+                )
+
+                //時間割をプリファレンスに保存する
+                setData(cellData.x,cellData.y,subject_name.toString(),class_number.toString(),
                     teacher_name.toString(),period.toString(),syllabus_link.toString())
-            scheduleList.add(schedule)
-        }else{
-            deleteData(global_scheduleDay,global_time)
+                scheduleList.add(schedule)
+            }
+
+        }else if(resultCode == Activity.RESULT_CANCELED){
+            deleteData(cellData?.x?:0,cellData?.y?:0)
         }
         saveData(shardPreferences,shardPrefEditor)
     }
@@ -116,16 +102,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-        Log.v("onCreateOption","onCreateOption")
-
-
         return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
-        Log.v("onSupportNavigate","onSupportNavigate")
-
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

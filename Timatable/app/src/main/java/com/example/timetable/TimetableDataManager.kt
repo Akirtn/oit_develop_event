@@ -24,8 +24,6 @@ var csv_array = ArrayList<ArrayList<String>>()
 val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 val day = arrayOf("月", "火", "水", "木", "金")
 
-var global_scheduleDay = 0
-var global_time = 0
 
 //プリファレンスの遅延初期化
 lateinit var shardPreferences: SharedPreferences
@@ -36,7 +34,7 @@ fun getColumn(index:Int):ArrayList<String>{
     for (row in csv_array){
         ret.add(row[index])
     }
-    var set = ret.toSet()
+    val set = ret.toSet()
     ret = ArrayList(set)
     return ret
 }
@@ -90,7 +88,6 @@ fun saveData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
         for (j in 0 until tableX){
             val table_x_y_data = tableDataArray[i][j]
             val json_array_save = JSONArray(table_x_y_data)
-            //Log.v("table_x_y_data", table_x_y_data.toString())
             sharedPrefEditor.putString("$j,$i", json_array_save.toString())
         }
     }
@@ -102,9 +99,9 @@ fun loadData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
     val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 
     for (i in 0 until tableY){
-        var loadArrayTwoDimension = ArrayList<ArrayList<String>>()
+        val loadArrayTwoDimension = ArrayList<ArrayList<String>>()
         for (j in 0 until tableX){
-            var loadArrayOneDimension = arrayListOf("","","","","")
+            val loadArrayOneDimension = arrayListOf("","","","","")
             val jsonArrayLoad = JSONArray(sharedPreferences.getString("$j,$i", "[]"))
             for (k in 0 until jsonArrayLoad.length()){
                 loadArrayOneDimension[k] = jsonArrayLoad.get(k).toString()
