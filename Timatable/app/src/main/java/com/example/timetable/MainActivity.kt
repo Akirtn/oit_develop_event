@@ -1,14 +1,8 @@
 package com.example.timetable
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
 import android.view.Menu
-import android.view.View
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,26 +12,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.example.timetable.model.CellDataEntity
-import com.example.timetable.ui.home.HomeFragment
-import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleEntity
-import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
-import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
-import kotlinx.android.synthetic.main.fragment_home.table
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-    //画面の変化で動く関数
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        Log.v("onWindowFocusChanged","onWindowFocusChanged")
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +58,6 @@ class MainActivity : AppCompatActivity() {
         //時間割を読み込んでスケジュールリストに追加
         scheduleList += loadData(shardPreferences,shardPrefEditor)
 
-        Log.v("main","end")
-
     }
 
     //入力画面から遷移すると動作する関数
@@ -85,9 +65,9 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         val cellData: CellDataEntity? = intent?.getSerializableExtra("cellData") as CellDataEntity
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
-            if (cellData != null){
+            if (cellData != null && cellData.subjectName.length > 0){
                 val subject_name = cellData.subjectName
                 val class_number = cellData.classNumber
                 val teacher_name = cellData.teacherName
@@ -112,8 +92,7 @@ class MainActivity : AppCompatActivity() {
                 scheduleList.add(schedule)
             }
 
-
-        }else{
+        }else if(resultCode == Activity.RESULT_CANCELED){
             deleteData(cellData?.x?:0,cellData?.y?:0)
         }
         saveData(shardPreferences,shardPrefEditor)
@@ -123,16 +102,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
-        Log.v("onCreateOption","onCreateOption")
-
-
         return true
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
-        Log.v("onSupportNavigate","onSupportNavigate")
-
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

@@ -6,11 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.timetable.*
 import com.example.timetable.model.CellDataEntity
@@ -18,7 +14,6 @@ import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
 import com.islandparadise14.mintable.tableinterface.OnTimeCellClickListener
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -38,8 +33,6 @@ class HomeFragment : Fragment() {
 
     t.setOnTimeCellClickListener(object : OnTimeCellClickListener{
       override fun timeCellClicked(scheduleDay: Int, time: Int) {
-        Log.v("tag",time.toString())
-        //onActivityResultにsheduleDayとtimeを渡すためにグローバル変数に代入
 
         //入力画面に遷移
         val cellData = CellDataEntity(scheduleDay,
@@ -52,7 +45,6 @@ class HomeFragment : Fragment() {
         val intent = Intent(activity,InputScreen::class.java)
         intent.putExtra("cellData",cellData)
         startActivityForResult(intent,1000)
-        //Log.v("cellClick",scheduleDay.toString())
       }
     })
 
@@ -62,16 +54,15 @@ class HomeFragment : Fragment() {
         override fun scheduleClicked(entity: ScheduleEntity) {
           val time = entity.startTime.split(":")
 
-          val cell_data = getData(entity.scheduleDay, time[0].toInt())
-          Log.v("celldata",cell_data.toString())
+          val arrayCellData = getData(entity.scheduleDay, time[0].toInt())
 
           val cellData = CellDataEntity(entity.scheduleDay,
             time[0].toInt(),
             entity.scheduleName,
             entity.roomInfo,
-            cell_data[2],
-            cell_data[3],
-            cell_data[4]
+            arrayCellData[2],
+            arrayCellData[3],
+            arrayCellData[4]
           )
 
           val intent = Intent(activity,InputScreen::class.java)
@@ -86,16 +77,11 @@ class HomeFragment : Fragment() {
 
   override fun onStart() {
     super.onStart()
-    Log.v("onStart","onStart")
-
     table.initTable(day)
     //テーブルの初期化設定
     table.baseSetting(20, 30, 100)
     table.isFullWidth(true)
     table.updateSchedules(scheduleList)
-
-
-    Log.v("onResume","onResume")
   }
 
 
