@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.util.Linkify
+import android.util.Log
 import android.widget.*
 import com.example.timetable.model.CellDataEntity
 import kotlinx.android.synthetic.main.activity_input_screen.*
@@ -14,11 +15,20 @@ class InputScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_screen)
 
+        //val spinnerArray =  arrayListOf<String>("前期","後期","前期（前半）","前期（後半）","後期（後半）","後期集中")
+
         val subjectNameText = findViewById(R.id.subject_name) as AutoCompleteTextView
         val classNumberText = findViewById(R.id.class_number) as AutoCompleteTextView
         val teacherNameText = findViewById(R.id.teacher_name) as AutoCompleteTextView
-        val periodText = findViewById(R.id.period) as AutoCompleteTextView
+        val periodText = findViewById(R.id.period) as Spinner
         val syllabusLinkText = findViewById(R.id.syllabus_link) as TextView
+
+        
+        //スピリットの設定
+        val periodAdapter = ArrayAdapter.createFromResource(this, R.array.spinnerArray, R.layout.period_spinner)
+        periodAdapter.setDropDownViewResource(R.layout.period_spinner_dropdown)
+        periodText.setAdapter(periodAdapter)
+
 
         val intent = getIntent()
         val receiveCellData: CellDataEntity? = intent.getSerializableExtra("cellData") as CellDataEntity
@@ -27,7 +37,8 @@ class InputScreen : AppCompatActivity() {
         subjectNameText.setText(receiveCellData?.subjectName)
         classNumberText.setText(receiveCellData?.classNumber)
         teacherNameText.setText(receiveCellData?.teacherName)
-        periodText.setText(receiveCellData?.period)
+        //periodText.setText(receiveCellData?.period)
+        periodText.setSelection((receiveCellData?.period?:"0").toIntOrNull()?:0)
         syllabusLinkText.setText(receiveCellData?.syllabus_link)
 
         //科目名の入力サジェスト設定
@@ -47,7 +58,7 @@ class InputScreen : AppCompatActivity() {
         val findSyllabusButton = findViewById<Button>(R.id.find_syllabus_button)
         findSyllabusButton.setOnClickListener{
             syllabusLinkText.text = findLink(subjectNameText.text.toString(),
-                teacherNameText.text.toString(), periodText.text.toString())
+                teacherNameText.text.toString(), periodText.getSelectedItem().toString())
             Linkify.addLinks(syllabusLinkText, Linkify.ALL)
         }
 
@@ -67,9 +78,10 @@ class InputScreen : AppCompatActivity() {
                         subjectNameText.text.toString(),
                         classNumberText.text.toString(),
                         teacherNameText.text.toString(),
-                        periodText.text.toString(),
-                        syllabus_link.text.toString()
+                        periodText.getSelectedItemPosition().toString(),
+                        syllabusLinkText.text.toString()
                     )
+                    Log.v("period",periodText.getSelectedItem().toString())
 
                     intent.putExtra("cellData", sendCellData)
                     setResult(Activity.RESULT_OK,intent)
