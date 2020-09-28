@@ -10,4 +10,23 @@
     <string name="menu_home">時間割</string>
     <string name="menu_gallery">長尾バス時刻表</string>
     <string name="menu_slideshow">北山バス時刻表</string>
+    
+    <string name="subject_name_textView">科目名</string>
+    <string name="class_number_textView">教室番号</string>
+    <string name="teacher_name_textView">教員名</string>
+    <string name="period_textView">学期</string>
+    <string name="syllabus_link">リンク</string>
+    <string name="find_syllabus_button">シラバス検索</string>
+    <string name="save_button">保存</string>
+    <string name="delete_button">削除</string>
+
+
+    <string-array name="spinnerArray">
+        <item>前期</item>
+        <item>後期</item>
+        <item>前期（前半）</item>
+        <item>前期（後半）</item>
+        <item>後期（後半）</item>
+        <item>後期集中</item>
+    </string-array>
 </resources>

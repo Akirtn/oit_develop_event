@@ -122,7 +122,7 @@ fun loadData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
                     i, //ScheduleDay object (MONDAY ~ SUNDAY)
                     (j+1).toString() + ":00", //startTime format: "HH:mm"
                     (j + 2).toString()+":00", //endTime  format: "HH:mm"
-                    "#73fcae68", //backgroundColor (optional)
+                    "#99bdff", //backgroundColor (optional)
                     "#000000" //textcolor (optional)
                 )
                 scheduleList.add(schedule)

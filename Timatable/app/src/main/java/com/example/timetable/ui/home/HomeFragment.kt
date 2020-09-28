@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
     super.onStart()
     table.initTable(day)
     //テーブルの初期化設定
-    table.baseSetting(20, 30, 100)
+    table.baseSetting(32, 30, 110)
     table.isFullWidth(true)
     table.updateSchedules(scheduleList)
   }

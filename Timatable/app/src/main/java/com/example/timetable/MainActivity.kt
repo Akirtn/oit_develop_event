@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     cellData.x, //ScheduleDay object (MONDAY ~ SUNDAY)
                     cellData.y.toString() + ":00", //startTime format: "HH:mm"
                     (cellData.y + 1).toString()+":00", //endTime  format: "HH:mm"
-                    "#73fcae68", //backgroundColor (optional)
+                    "#99bdff", //backgroundColor (optional)
                     "#000000" //textcolor (optional)
                 )
 
