@@ -1,19 +1,23 @@
 package com.example.timetable
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
-import com.google.android.material.navigation.NavigationView
+import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.example.timetable.model.CellDataEntity
+import com.google.android.material.navigation.NavigationView
 import com.islandparadise14.mintable.model.ScheduleEntity
+import kotlinx.android.synthetic.main.fragment_home.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -58,6 +62,24 @@ class MainActivity : AppCompatActivity() {
         //時間割を読み込んでスケジュールリストに追加
         scheduleList += loadData(shardPreferences,shardPrefEditor)
 
+    }
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        table.initTable(day)
+        val dp = resources.displayMetrics.density
+        val drawerLayoutHeight = findViewById<DrawerLayout>(R.id.drawer_layout).height / dp
+        val toolbarHeight = (findViewById<Toolbar>(R.id.toolbar)).height / dp
+
+        val cellHeight = ((drawerLayoutHeight - toolbarHeight - 52) / 6).toInt()
+
+        table.baseSetting(30, 30, cellHeight)
+        table.isFullWidth(true)
+        table.updateSchedules(scheduleList)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onWindowFocusChanged(false)
     }
 
     //入力画面から遷移すると動作する関数
