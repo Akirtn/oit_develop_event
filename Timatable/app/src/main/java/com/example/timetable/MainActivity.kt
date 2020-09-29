@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         val drawerLayoutHeight = findViewById<DrawerLayout>(R.id.drawer_layout).height / dp
         val toolbarHeight = (findViewById<Toolbar>(R.id.toolbar)).height / dp
 
-        val cellHeight = ((drawerLayoutHeight - toolbarHeight - 55) / 6).toInt()
+        val cellHeight = ((drawerLayoutHeight - toolbarHeight - 52) / 6).toInt()
 
         table.baseSetting(30, 30, cellHeight)
         table.isFullWidth(true)

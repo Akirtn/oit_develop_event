@@ -74,14 +74,4 @@ class HomeFragment : Fragment() {
     )
     return root
   }
-
-  override fun onStart() {
-    super.onStart()
-    //テーブルの初期化設定
-    //table.baseSetting(32, 30, 110)
-    //table.isFullWidth(true)
-    //table.updateSchedules(scheduleList)
-  }
-
-
 }
