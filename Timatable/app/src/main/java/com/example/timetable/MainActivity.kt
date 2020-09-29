@@ -1,7 +1,6 @@
 package com.example.timetable
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -16,10 +15,6 @@ import com.example.timetable.model.CellDataEntity
 import com.google.android.material.navigation.NavigationView
 import com.islandparadise14.mintable.model.ScheduleEntity
 import kotlinx.android.synthetic.main.fragment_home.*
-import petrov.kristiyan.colorpicker.ColorPicker
-import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 
 var cellHeight = 0
@@ -49,21 +44,10 @@ class MainActivity : AppCompatActivity() {
         shardPrefEditor = shardPreferences.edit()
 
         //csv読み込み
-        val assetManager = resources.assets
-        val inputStream= assetManager.open("syllabus_database_3.csv")
-        //val csvString = inputStream.bufferedReader().use { it.readText() }
-        //Log.v("csv",csvString)
-        val inputStreamReader = InputStreamReader(inputStream)
-        var bufferedReader = BufferedReader(inputStreamReader)
-        var line: String? = bufferedReader.readLine()
-        while (line != null){
-            val rowData = line.split(',')
-            csv_array.add(ArrayList(rowData))
-            line = bufferedReader.readLine()
-        }
+        loadCSV(resources.assets)
 
         //時間割を読み込んでスケジュールリストに追加
-        scheduleList += loadData(shardPreferences,shardPrefEditor)
+        scheduleList += loadSyllabusData(shardPreferences,shardPrefEditor)
 
     }
 
@@ -93,13 +77,7 @@ class MainActivity : AppCompatActivity() {
         val cellData: CellDataEntity? = intent?.getSerializableExtra("cellData") as CellDataEntity
         if (resultCode == Activity.RESULT_OK) {
 
-            if (cellData != null && cellData.subjectName.length > 0){
-                val subject_name = cellData.subjectName
-                val class_number = cellData.classNumber
-                val teacher_name = cellData.teacherName
-                val period = cellData.period
-                val syllabus_link = cellData.syllabus_link
-
+            if (cellData != null && cellData.subjectName.isNotEmpty()){
                 //科目内容設定
                 val schedule = ScheduleEntity(
                     cellData.x * cellData.y, //originId
@@ -113,8 +91,7 @@ class MainActivity : AppCompatActivity() {
                 )
 
                 //時間割をプリファレンスに保存する
-                setData(cellData.x,cellData.y,subject_name.toString(),class_number.toString(),
-                    teacher_name.toString(),period.toString(),syllabus_link.toString(), cellData.color)
+                setData(cellData)
                 scheduleList.add(schedule)
             }
 

@@ -2,6 +2,8 @@ package com.example.timetable.model
 
 import java.io.Serializable
 
+val cellDataEntitySize = 8
+
 class CellDataEntity (
     var x: Int,
     var y: Int,
@@ -9,6 +11,6 @@ class CellDataEntity (
     var classNumber: String,
     var teacherName: String,
     var period: String,
-    var syllabus_link: String,
+    var syllabusLink: String,
     var color: String
 ) : Serializable
