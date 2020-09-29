@@ -127,5 +127,16 @@
         android:background="@drawable/delete_button_design"
         android:text="@string/delete_button" />
 
+    <Button
+        android:id="@+id/color_change_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/color_change_button_design"
+        android:text="@string/color_change_button" />
+
 
 </LinearLayout>

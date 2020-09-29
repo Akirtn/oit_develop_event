@@ -41,7 +41,8 @@ class HomeFragment : Fragment() {
           "",
           "",
           "",
-          "")
+          "",
+          "#99bdff")
         val intent = Intent(activity,InputScreen::class.java)
         intent.putExtra("cellData",cellData)
         startActivityForResult(intent,1000)
@@ -62,7 +63,8 @@ class HomeFragment : Fragment() {
             entity.roomInfo,
             arrayCellData[2],
             arrayCellData[3],
-            arrayCellData[4]
+            arrayCellData[4],
+            arrayCellData[5]
           )
 
           val intent = Intent(activity,InputScreen::class.java)
@@ -73,5 +75,13 @@ class HomeFragment : Fragment() {
       }
     )
     return root
+  }
+
+  override fun onStart() {
+    super.onStart()
+    table.initTable(day)
+    table.baseSetting(30, 30, cellHeight)
+    table.isFullWidth(true)
+    table.updateSchedules(scheduleList)
   }
 }
