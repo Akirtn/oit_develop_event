@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 
 private var tableX = 5
 private var tableY = 6
-private val cellSize = 5
+private val cellSize = 6
 //時間割のデータを格納する三次元リスト
 private var tableDataArray = ArrayList<ArrayList<ArrayList<String>>>()
 
@@ -41,7 +41,6 @@ fun getColumn(index:Int):ArrayList<String>{
 
 
 fun findLink(subject_name:String, teacher_name: String, period: String): String {
-    Log.v("hikisu",subject_name)
     for (row in csv_array){
         Log.v("row",row.toString())
         if (row[0] == subject_name && row[2] == period && row[4] == teacher_name){
@@ -52,7 +51,7 @@ fun findLink(subject_name:String, teacher_name: String, period: String): String 
 }
 
 fun setData(x: Int, y:Int, subject_name: String, class_number: String,
-            teacher_name: String, period: String, syllabus_link: String) : Int{
+            teacher_name: String, period: String, syllabus_link: String, color:String) : Int{
 
     if (x < tableX && y < tableY){
         tableDataArray[x][y-1][0] = subject_name
@@ -60,7 +59,7 @@ fun setData(x: Int, y:Int, subject_name: String, class_number: String,
         tableDataArray[x][y-1][2] = teacher_name
         tableDataArray[x][y-1][3] = period
         tableDataArray[x][y-1][4] = syllabus_link
-        Log.v("tableDataArray", tableDataArray[x][y-1].toString())
+        tableDataArray[x][y-1][5] = color
         return 0
     }else{
         return 1
@@ -101,7 +100,7 @@ fun loadData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
     for (i in 0 until tableY){
         val loadArrayTwoDimension = ArrayList<ArrayList<String>>()
         for (j in 0 until tableX){
-            val loadArrayOneDimension = arrayListOf("","","","","")
+            val loadArrayOneDimension = arrayListOf("","","","","","")
             val jsonArrayLoad = JSONArray(sharedPreferences.getString("$j,$i", "[]"))
             for (k in 0 until jsonArrayLoad.length()){
                 loadArrayOneDimension[k] = jsonArrayLoad.get(k).toString()
@@ -122,7 +121,7 @@ fun loadData(sharedPreferences: SharedPreferences, sharedPrefEditor: SharedPrefe
                     i, //ScheduleDay object (MONDAY ~ SUNDAY)
                     (j+1).toString() + ":00", //startTime format: "HH:mm"
                     (j + 2).toString()+":00", //endTime  format: "HH:mm"
-                    "#99bdff", //backgroundColor (optional)
+                    tableDataArray[i][j][5], //backgroundColor (optional)
                     "#000000" //textcolor (optional)
                 )
                 scheduleList.add(schedule)

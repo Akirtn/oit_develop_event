@@ -1,11 +1,9 @@
 package com.example.timetable
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Rect
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -18,8 +16,13 @@ import com.example.timetable.model.CellDataEntity
 import com.google.android.material.navigation.NavigationView
 import com.islandparadise14.mintable.model.ScheduleEntity
 import kotlinx.android.synthetic.main.fragment_home.*
+import petrov.kristiyan.colorpicker.ColorPicker
+import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
 import java.io.BufferedReader
 import java.io.InputStreamReader
+
+
+var cellHeight = 0
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,15 +66,16 @@ class MainActivity : AppCompatActivity() {
         scheduleList += loadData(shardPreferences,shardPrefEditor)
 
     }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        table.initTable(day)
+
         val dp = resources.displayMetrics.density
         val drawerLayoutHeight = findViewById<DrawerLayout>(R.id.drawer_layout).height / dp
         val toolbarHeight = (findViewById<Toolbar>(R.id.toolbar)).height / dp
+        cellHeight = ((drawerLayoutHeight - toolbarHeight - 52) / 6).toInt()
 
-        val cellHeight = ((drawerLayoutHeight - toolbarHeight - 52) / 6).toInt()
-
+        table.initTable(day)
         table.baseSetting(30, 30, cellHeight)
         table.isFullWidth(true)
         table.updateSchedules(scheduleList)
@@ -104,13 +108,13 @@ class MainActivity : AppCompatActivity() {
                     cellData.x, //ScheduleDay object (MONDAY ~ SUNDAY)
                     cellData.y.toString() + ":00", //startTime format: "HH:mm"
                     (cellData.y + 1).toString()+":00", //endTime  format: "HH:mm"
-                    "#99bdff", //backgroundColor (optional)
+                    cellData.color, //backgroundColor (optional)
                     "#000000" //textcolor (optional)
                 )
 
                 //時間割をプリファレンスに保存する
                 setData(cellData.x,cellData.y,subject_name.toString(),class_number.toString(),
-                    teacher_name.toString(),period.toString(),syllabus_link.toString())
+                    teacher_name.toString(),period.toString(),syllabus_link.toString(), cellData.color)
                 scheduleList.add(schedule)
             }
 

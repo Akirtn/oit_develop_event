@@ -9,5 +9,6 @@ class CellDataEntity (
     var classNumber: String,
     var teacherName: String,
     var period: String,
-    var syllabus_link: String
+    var syllabus_link: String,
+    var color: String
 ) : Serializable

@@ -19,6 +19,7 @@
     <string name="find_syllabus_button">シラバス検索</string>
     <string name="save_button">保存</string>
     <string name="delete_button">削除</string>
+    <string name="color_change_button">色変更</string>
 
 
     <string-array name="spinnerArray">
