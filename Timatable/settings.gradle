@@ -1,5 +1,5 @@
 include ':app'
 rootProject.name = "Timatable"
 include ':Mintable'
-project(':Mintable').projectDir = new File(settingsDir,'../MinTable')
+project(':Mintable').projectDir = new File(settingsDir,'../Mintable')
 include ':Mintable:app'

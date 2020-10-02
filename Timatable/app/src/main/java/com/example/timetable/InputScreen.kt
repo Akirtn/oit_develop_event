@@ -1,12 +1,16 @@
 package com.example.timetable
 
 import android.app.Activity
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.util.Linkify
-import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.example.timetable.model.CellDataEntity
+import petrov.kristiyan.colorpicker.ColorPicker
+import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
+
 
 //入力画面処理
 class InputScreen : AppCompatActivity() {
@@ -14,50 +18,77 @@ class InputScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_screen)
 
-        var subject_name_text = findViewById<AutoCompleteTextView>(R.id.subject_name) as AutoCompleteTextView
-        var class_number_text = findViewById<AutoCompleteTextView>(R.id.class_number) as AutoCompleteTextView
-        var teacher_name_text = findViewById<AutoCompleteTextView>(R.id.teacher_name) as AutoCompleteTextView
-        var period_text = findViewById<AutoCompleteTextView>(R.id.period) as AutoCompleteTextView
-        var syllabus_link_text = findViewById<TextView>(R.id.syllabus_link) as TextView
+        val subjectNameText = findViewById<AutoCompleteTextView>(R.id.subject_name)
+        val classNumberText = findViewById<AutoCompleteTextView>(R.id.class_number)
+        val teacherNameText = findViewById<AutoCompleteTextView>(R.id.teacher_name)
+        val periodText = findViewById<Spinner>(R.id.period)
+        val syllabusLinkText = findViewById<TextView>(R.id.syllabus_link)
+        val colorChangeBotton = findViewById<Button>(R.id.color_change_button)
+
+        //スピリットの設定
+        val periodAdapter = ArrayAdapter.createFromResource(this, R.array.spinnerArray, R.layout.period_spinner)
+        periodAdapter.setDropDownViewResource(R.layout.period_spinner_dropdown)
+        periodText.setAdapter(periodAdapter)
+
 
         val intent = getIntent()
+        val receiveCellData: CellDataEntity? = intent.getSerializableExtra("cellData") as CellDataEntity
 
-        subject_name_text.setText(intent.extras?.getString("subject_name")?:"")
-        class_number_text.setText(intent.extras?.getString("class_number")?:"")
-        teacher_name_text.setText(intent.extras?.getString("teacher_name")?:"")
-        period_text.setText(intent.extras?.getString("period")?:"")
-        syllabus_link_text.setText(intent.extras?.getString("syllabus_link")?:"")
+        //インテントの中身をテキストエリアに代入
+        subjectNameText.setText(receiveCellData?.subjectName)
+        classNumberText.setText(receiveCellData?.classNumber)
+        teacherNameText.setText(receiveCellData?.teacherName)
+        periodText.setSelection((receiveCellData?.period?:"0").toIntOrNull()?:0)
+        syllabusLinkText.setText(receiveCellData?.syllabusLink)
+        colorChangeBotton.setBackgroundColor(Color.parseColor(receiveCellData?.color))
 
-        val subject_name_adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
-        subject_name_text.setAdapter(subject_name_adapter)
-        subject_name_text.setThreshold(1)
-        val teacher_name_adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(4))
-        teacher_name_text.setAdapter(teacher_name_adapter)
-        teacher_name_text.setThreshold(1)
+        var colorChangeButtonBackColor = Color.parseColor(receiveCellData?.color)
 
-        Linkify.addLinks(syllabus_link_text, Linkify.ALL)
+        //科目名の入力サジェスト設定
+        val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
+        subjectNameText.setAdapter(subjectNameAdapter)
+        subjectNameText.threshold = 1
 
-       //シラバス検索ボタン
-        val find_syllabus_button = findViewById<Button>(R.id.find_syllabus_button)
-        find_syllabus_button.setOnClickListener{
-            syllabus_link_text.text = findLink(subject_name_text.text.toString(),
-                    teacher_name_text.text.toString(), period_text.text.toString())
-            Linkify.addLinks(syllabus_link_text, Linkify.ALL)
+        //教師名の入力サジェスト設定
+        val teacherNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(4))
+        teacherNameText.setAdapter(teacherNameAdapter)
+        teacherNameText.threshold = 1
+
+        //シラバスをリンク化
+        Linkify.addLinks(syllabusLinkText, Linkify.ALL)
+
+        //戻るボタンが押されたときに時間割が消えるのを防ぐための処理
+        intent.putExtra("cellData", receiveCellData)
+        setResult(Activity.RESULT_OK,intent)
+
+        //シラバス検索ボタン
+        val findSyllabusButton = findViewById<Button>(R.id.find_syllabus_button)
+        findSyllabusButton.setOnClickListener{
+            syllabusLinkText.text = findLink(subjectNameText.text.toString(),
+                teacherNameText.text.toString(), periodText.getSelectedItem().toString())
+            Linkify.addLinks(syllabusLinkText, Linkify.ALL)
         }
 
         //ボタンが押されると入力された値を取得する
-        val save_button: Button = findViewById(R.id.save_button)
-        save_button.setOnClickListener{
+        val saveButton: Button = findViewById(R.id.save_button)
+        saveButton.setOnClickListener{
 
             //科目名が入力されている場合はEditTextを返却、入力されていないときは返却しない
-            if(subject_name_text.text.length > 0){
-                val intent = Intent(this,InputScreen::class.java)
-                intent.putExtra("subject_name",subject_name_text.text.toString())
-                intent.putExtra("class_number",class_number_text.text.toString())
-                intent.putExtra("teacher_name",teacher_name_text.text.toString())
-                intent.putExtra("period", period_text.text.toString())
-                intent.putExtra("syllabus_link", syllabus_link_text.text.toString())
-                setResult(Activity.RESULT_OK,intent)
+            if(subjectNameText.text.isNotEmpty()){
+                if(receiveCellData != null){
+                    val sendCellData = CellDataEntity(receiveCellData.x,
+                        receiveCellData.y,
+                        subjectNameText.text.toString(),
+                        classNumberText.text.toString(),
+                        teacherNameText.text.toString(),
+                        periodText.selectedItemPosition.toString(),
+                        syllabusLinkText.text.toString(),
+                        String.format("#%06X", 0xFFFFFF and colorChangeButtonBackColor)
+                    )
+                    intent.putExtra("cellData", sendCellData)
+                    setResult(Activity.RESULT_OK,intent)
+                }
+
             }else{
                 setResult(Activity.RESULT_CANCELED,intent)
             }
@@ -65,10 +96,45 @@ class InputScreen : AppCompatActivity() {
         }
 
         //削除ボタン
-        val delete_button: Button = findViewById(R.id.delete_button)
-        delete_button.setOnClickListener{
+        val deleteButton: Button = findViewById(R.id.delete_button)
+        deleteButton.setOnClickListener{
             setResult(Activity.RESULT_CANCELED,intent)
             finish()
         }
+
+        //shapeの動的生成に利用する
+        val radius = 36f
+        val drawable = GradientDrawable()
+
+        //色検索ボタン
+        val colorChangeButton: Button = findViewById(R.id.color_change_button)
+        colorChangeButton.setOnClickListener{
+            val colorPicker = ColorPicker(this)
+            colorPicker.setRoundColorButton(true)
+            colorPicker.setDefaultColorButton(Color.parseColor("#7f7fff"))
+            colorPicker.show()
+
+            colorPicker.setOnChooseColorListener(object : OnChooseColorListener {
+                override fun onChooseColor(position: Int, color: Int) {
+                    if (color != 0){
+                        //ボタンのshapeを動的に生成
+                        drawable.cornerRadius = radius
+                        drawable.setColor(color)
+
+                        colorChangeButtonBackColor = color
+
+                        colorChangeButton.setBackgroundDrawable(drawable)
+                    }
+                }
+                override fun onCancel() {
+
+                }
+            })
+        }
+
+        //ボタンのshapeを動的に生成
+        drawable.cornerRadius = radius
+        drawable.setColor(colorChangeButtonBackColor)
+        colorChangeButton.setBackgroundDrawable(drawable)
     }
 }
