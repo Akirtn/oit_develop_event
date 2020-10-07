@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'realm-android'
+
 
 android {
     compileSdkVersion 30
@@ -48,5 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'petrov.kristiyan:colorpicker-library:1.1.10'
+    implementation 'io.realm:android-adapters:2.1.1'
     implementation project(':Mintable:app')
 }

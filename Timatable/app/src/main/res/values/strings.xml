@@ -8,9 +8,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">時間割</string>
-    <string name="menu_gallery">長尾バス時刻表</string>
-    <string name="menu_slideshow">北山バス時刻表</string>
-    
+    <string name="menu_nagao">長尾バス時刻表</string>
+    <string name="menu_kitayama">北山バス時刻表</string>
+    <string name="menu_tasklist">タスクリスト</string>
+
     <string name="subject_name_textView">科目名</string>
     <string name="class_number_textView">教室番号</string>
     <string name="teacher_name_textView">教員名</string>

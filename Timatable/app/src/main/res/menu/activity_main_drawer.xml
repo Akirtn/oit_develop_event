@@ -9,12 +9,15 @@
             android:icon="@drawable/calendar"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_nagao"
             android:icon="@drawable/ic_menu_bus"
-            android:title="@string/menu_gallery" />
+            android:title="@string/menu_nagao" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_kitayama"
             android:icon="@drawable/ic_menu_bus"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_kitayama" />
+        <item
+            android:id="@+id/nav_task"
+            android:title="@string/menu_tasklist"/>
     </group>
 </menu>
