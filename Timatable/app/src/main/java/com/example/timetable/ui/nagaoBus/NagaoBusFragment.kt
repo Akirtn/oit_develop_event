@@ -1,4 +1,4 @@
-package com.example.timetable.ui.gallery
+package com.example.timetable.ui.nagaoBus
 
 import android.os.Bundle
 import android.view.LayoutInflater

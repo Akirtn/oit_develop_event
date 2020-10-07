@@ -12,14 +12,21 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.timetable.ui.gallery.NagaoBusFragment"
-        android:label="@string/menu_gallery"
+        android:id="@+id/nav_nagao"
+        android:name="com.example.timetable.ui.nagaoBus.NagaoBusFragment"
+        android:label="@string/menu_nagao"
         tools:layout="@layout/fragment_nagao_bus" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.timetable.ui.slideshow.KitayamaBusFragment"
-        android:label="@string/menu_slideshow"
+        android:id="@+id/nav_kitayama"
+        android:name="com.example.timetable.ui.kitayamaBus.KitayamaBusFragment"
+        android:label="@string/menu_kitayama"
         tools:layout="@layout/fragment_kitayama_bus" />
+
+    <fragment
+        android:id="@+id/nav_task"
+        android:name="com.example.timetable.ui.taskList.NagaoBusFragment"
+        android:label="@string/menu_tasklist"
+        tools:layout="@layout/fragment_task_list"/>
+
 </navigation>
