@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".InputScreen">
 
@@ -83,68 +83,93 @@
             android:spinnerMode="dropdown" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/syllabus_link"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:hint="@string/syllabus_link"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/color_change_button"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/color_change_button_design"
-        android:text="@string/color_change_button" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/save_button"
+        <TextView
+            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:background="@drawable/save_button_design"
-            android:text="@string/save_button" />
+            android:text="@string/syllabus_link"
+            android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/delete_button_design"
-            android:text="@string/delete_button" />
+        <TextView
+            android:id="@+id/syllabus_link"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:textSize="18sp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/find_syllabus_button"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/color_change_button"
+            app:srcCompat="@drawable/ic_baseline_palette" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp"
+            android:gravity="center"
+            android:text="@string/color_change_button"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/color_change_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/bg_button_normal"
+            android:gravity="center" />
+    </FrameLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/find_syllabus_button_design"
-        android:text="@string/find_syllabus_button" />
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/find_syllabus_button"
+            app:srcCompat="@drawable/ic_baseline_find_in_page" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp"
+            android:gravity="center"
+            android:text="@string/find_syllabus_button"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/find_syllabus_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button"
+            android:gravity="center" />
+    </FrameLayout>
 
 
 </LinearLayout>

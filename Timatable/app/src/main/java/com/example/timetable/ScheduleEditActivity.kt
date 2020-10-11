@@ -1,12 +1,20 @@
 package com.example.timetable
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat.format
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.example.timetable.R
 import com.example.timetable.Schedule
+import com.example.timetable.model.CellDataEntity
+import com.example.timetable.ui.home.HomeFragment
+import com.example.timetable.ui.taskList.TaskListFragment
+import com.example.timetable.ui.taskList.TaskListViewModel
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -23,24 +31,53 @@ import java.util.*
 class ScheduleEditActivity : AppCompatActivity() {
     private lateinit var realm: Realm
 
+    private var scheduleId = 0L
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_schedule_edit)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         realm = Realm.getDefaultInstance()
 
-        val scheduleId = intent?.getLongExtra("schedule_id", -1L)
+        scheduleId = intent?.getLongExtra("schedule_id", -1L)?:0L
         if(scheduleId != -1L){
             val schedule = realm.where<Schedule>()
                 .equalTo("id",scheduleId).findFirst()
             dateEdit.setText(android.text.format.DateFormat.format("yyyy/MM/dd", schedule?.date))
             titleEdit.setText(schedule?.title)
             detailEdit.setText(schedule?.detail)
-            delete.visibility = View.VISIBLE
-        }else{
-            delete.visibility = View.INVISIBLE
         }
 
-        save.setOnClickListener{ view: View ->
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_delete -> {
+        // User chose the "Settings" item, show the app settings UI...
+            realm.executeTransaction{ db: Realm ->
+                db.where<Schedule>().equalTo("id", scheduleId)
+                    ?.findFirst()
+                    ?.deleteFromRealm()
+            }
+            setResult(-2,intent)
+            finish()
+            true
+        }
+
+        R.id.action_save -> {
+            // User chose the "Settings" item, show the app settings UI...
             when(scheduleId){
                 -1L -> {
                     realm.executeTransaction{ db: Realm ->
@@ -53,10 +90,6 @@ class ScheduleEditActivity : AppCompatActivity() {
                         schedule.detail = detailEdit.text.toString()
                         schedule.detail = "test"
                     }
-                    Snackbar.make(view, "追加しました", Snackbar.LENGTH_SHORT)
-                        .setAction("戻る") { finish() }
-                        .setActionTextColor(Color.YELLOW)
-                        .show()
                 }
                 else -> {
                     realm.executeTransaction{ db: Realm ->
@@ -68,31 +101,22 @@ class ScheduleEditActivity : AppCompatActivity() {
                         schedule?.title = titleEdit.text.toString()
                         schedule?.detail = detailEdit.text.toString()
                     }
-
-                    Snackbar.make(view, "修正しました", Snackbar.LENGTH_SHORT)
-                        .setAction("戻る") { finish() }
-                        .setActionTextColor(Color.YELLOW)
-                        .show()
                 }
             }
+            //val intent = Intent(this,MainActivity::class.java)
+            setResult(100,intent)
+            finish()
+            true
         }
 
-        delete.setOnClickListener{ view: View ->
-            realm.executeTransaction{ db: Realm ->
-                db.where<Schedule>().equalTo("id", scheduleId)
-                    ?.findFirst()
-                    ?.deleteFromRealm()
-            }
-            Snackbar.make(view, "削除しました", Snackbar.LENGTH_SHORT)
-                .setAction("戻る") { finish() }
-                .setActionTextColor(Color.YELLOW)
-                .show()
-        }
-    }
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
 
-    override fun onDestroy() {
-        super.onDestroy()
-        realm.close()
+            setResult(-3,intent)
+            finish()
+            super.onOptionsItemSelected(item)
+        }
     }
 
     private fun String.toDate(pattern: String = "yyyy/MM/dd HH:mm"): Date? {

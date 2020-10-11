@@ -11,7 +11,7 @@ class ScheduleEntity(
     var endTime: String,
     var backgroundColor: String = "#dddddd",
     var textColor: String = "#ffffff"
-) {
+){
 
     var mOnClickListener: View.OnClickListener? = null
 
