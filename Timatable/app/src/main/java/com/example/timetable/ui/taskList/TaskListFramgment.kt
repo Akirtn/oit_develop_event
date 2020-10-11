@@ -1,25 +1,27 @@
 package com.example.timetable.ui.taskList
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.timetable.R
-import com.example.timetable.Schedule
-import com.example.timetable.ScheduleAdapter
-import com.example.timetable.ScheduleEditActivity
+import com.example.timetable.*
 import com.example.timetable.ui.nagaoBus.NagaoBusViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.islandparadise14.mintable.model.ScheduleEntity
 import io.realm.Realm
 import io.realm.kotlin.where
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_task_list.*
 
-class NagaoBusFragment : Fragment() {
+class TaskListFragment : Fragment() {
 
     private lateinit var taskListViewModel: TaskListViewModel
 
@@ -55,7 +57,7 @@ class NagaoBusFragment : Fragment() {
         adapter.setOnItemClickListener { id ->
             val intent = Intent(activity, ScheduleEditActivity::class.java)
                 .putExtra("schedule_id",id)
-            startActivity(intent)
+            startActivityForResult(intent,1000)
         }
     }
 
@@ -63,4 +65,19 @@ class NagaoBusFragment : Fragment() {
         super.onDestroy()
         realm.close()
     }
+    /*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            Snackbar.make(nav_view, "保存しました", Snackbar.LENGTH_LONG)
+                .setActionTextColor(Color.YELLOW)
+                .show()
+
+        }else if(resultCode == -2){
+            Snackbar.make(nav_view, "削除しました", Snackbar.LENGTH_LONG)
+                .setActionTextColor(Color.YELLOW)
+                .show()
+
+        }
+    }*/
 }

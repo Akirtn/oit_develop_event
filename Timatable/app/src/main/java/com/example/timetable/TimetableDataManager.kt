@@ -16,6 +16,7 @@ private var tableDataArray = ArrayList<ArrayList<ArrayList<String>>>()
 
 val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
 val day = arrayOf("月", "火", "水", "木", "金")
+var scheduleEntity: ScheduleEntity? = null
 
 //プリファレンスの遅延初期化
 lateinit var shardPreferences: SharedPreferences
