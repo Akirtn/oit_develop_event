@@ -20,5 +20,8 @@
             android:id="@+id/nav_kitayama"
             android:icon="@drawable/ic_menu_bus"
             android:title="@string/menu_kitayama" />
+        <item
+            android:id="@+id/nav_license"
+            android:title="オープンソースソフトウェア"/>
     </group>
 </menu>
