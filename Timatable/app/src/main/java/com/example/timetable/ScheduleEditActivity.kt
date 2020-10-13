@@ -9,6 +9,7 @@ import android.text.format.DateFormat.format
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import com.example.timetable.R
 import com.example.timetable.Schedule
 import com.example.timetable.model.CellDataEntity
@@ -48,6 +49,11 @@ class ScheduleEditActivity : AppCompatActivity() {
             titleEdit.setText(schedule?.title)
             detailEdit.setText(schedule?.detail)
         }
+
+        //科目名の入力サジェスト設定
+        val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
+        titleEdit.setAdapter(subjectNameAdapter)
+        titleEdit.threshold = 1
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

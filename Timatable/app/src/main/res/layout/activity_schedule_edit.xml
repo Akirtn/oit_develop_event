@@ -33,7 +33,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/schedule_title" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/titleEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
