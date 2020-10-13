@@ -60,7 +60,6 @@
         android:ems="10"
         android:importantForAutofill="no"
         android:inputType="textMultiLine|textPersonName"
-        android:maxLines="16"
-        android:minLines="2" />
+        android:maxLines="16" />
 
 </LinearLayout>
