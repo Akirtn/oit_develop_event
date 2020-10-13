@@ -1,4 +1,4 @@
-package com.example.timetable.ui.gallery
+package com.example.timetable.ui.nagaoBus
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

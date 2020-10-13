@@ -6,15 +6,22 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/calendar"
+            android:icon="@drawable/ic_baseline_grid_on"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_bus"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_task"
+            android:icon="@drawable/ic_baseline_format_list_bulleted"
+            android:title="@string/menu_tasklist"/>
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_nagao"
             android:icon="@drawable/ic_menu_bus"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_nagao" />
+        <item
+            android:id="@+id/nav_kitayama"
+            android:icon="@drawable/ic_menu_bus"
+            android:title="@string/menu_kitayama" />
+        <item
+            android:id="@+id/nav_license"
+            android:title="オープンソースソフトウェア"/>
     </group>
 </menu>

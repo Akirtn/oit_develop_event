@@ -69,7 +69,8 @@ class HomeFragment : Fragment() {
 
           val intent = Intent(activity,InputScreen::class.java)
           intent.putExtra("cellData",cellData)
-          scheduleList.remove(entity)
+          //scheduleList.remove(entity)
+          scheduleEntity = entity
           startActivityForResult(intent,1000)
         }
       }

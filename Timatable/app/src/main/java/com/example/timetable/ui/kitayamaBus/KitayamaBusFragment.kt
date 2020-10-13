@@ -1,4 +1,4 @@
-package com.example.timetable.ui.slideshow
+package com.example.timetable.ui.kitayamaBus
 
 import android.os.Bundle
 import android.view.LayoutInflater
