@@ -29,4 +29,10 @@
         android:label="@string/menu_tasklist"
         tools:layout="@layout/fragment_task_list"/>
 
+    <fragment
+        android:id="@+id/nav_license"
+        android:name="com.example.timetable.ui.license.LicenseFragment"
+        android:label="オープンソースライセンス"
+        tools:layout="@layout/fragment_license"/>
+
 </navigation>

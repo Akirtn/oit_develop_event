@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">OIT Time Table</string>
+    <string name="app_name">Oit Time Table</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">OIT Time Table</string>
-    <string name="nav_header_subtitle">version 0.1</string>
+    <string name="nav_header_title">Oit Time Table</string>
+    <string name="nav_header_subtitle">version 0.0.1</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
@@ -36,4 +36,5 @@
         <item>後期（後半）</item>
         <item>後期集中</item>
     </string-array>
+
 </resources>
