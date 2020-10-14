@@ -26,13 +26,13 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_task_list.*
 import java.io.Serializable
 
-
+val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
+val day = arrayOf("月", "火", "水", "木", "金")
 var cellHeight = 0
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +51,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        //データの保存に使用するプリファレンスの初期化
-        shardPreferences = getPreferences(MODE_PRIVATE)
-        shardPrefEditor = shardPreferences.edit()
 
         //csv読み込み
         loadCSV(resources.assets)
-
-        //時間割を読み込んでスケジュールリストに追加
-        scheduleList += loadSyllabusData(shardPreferences,shardPrefEditor)
 
     }
 
@@ -92,23 +86,6 @@ class MainActivity : AppCompatActivity() {
         if (serializable != null){
             val cellData: CellDataEntity? = serializable as CellDataEntity
             if (resultCode == 100) {
-                if (cellData!= null && cellData.subjectName.isNotEmpty()){
-                    //科目内容設定
-                    val schedule = ScheduleEntity(
-                        cellData.x * cellData.y, //originId
-                        cellData.subjectName, //scheduleName
-                        cellData.classNumber, //roomInfo
-                        cellData.x, //ScheduleDay object (MONDAY ~ SUNDAY)
-                        cellData.y.toString() + ":00", //startTime format: "HH:mm"
-                        (cellData.y + 1).toString()+":00", //endTime  format: "HH:mm"
-                        cellData.color, //backgroundColor (optional)
-                        "#000000" //textcolor (optional)
-                    )
-
-                    //時間割をプリファレンスに保存する
-                    setData(cellData)
-                    scheduleList.add(schedule)
-                }
 
                 Snackbar.make(nav_view, "保存しました", Snackbar.LENGTH_LONG)
                     .setActionTextColor(Color.YELLOW)
@@ -120,7 +97,6 @@ class MainActivity : AppCompatActivity() {
                     .show()
 
             }
-            saveData(shardPreferences,shardPrefEditor)
         }else{
             if (resultCode == 100) {
 
@@ -133,7 +109,6 @@ class MainActivity : AppCompatActivity() {
                     .show()
             }
         }
-
     }
 
 

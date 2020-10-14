@@ -1,30 +1,17 @@
 package com.example.timetable
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.format.DateFormat.format
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ArrayAdapter
-import com.example.timetable.R
-import com.example.timetable.Schedule
-import com.example.timetable.model.CellDataEntity
-import com.example.timetable.ui.home.HomeFragment
-import com.example.timetable.ui.taskList.TaskListFragment
-import com.example.timetable.ui.taskList.TaskListViewModel
-import com.google.android.material.snackbar.Snackbar
+import com.example.timetable.model.Schedule
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_schedule_edit.*
 import java.lang.IllegalArgumentException
-import java.lang.String.format
-import java.text.DateFormat
-import java.text.MessageFormat.format
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,7 +26,12 @@ class ScheduleEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_schedule_edit)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        realm = Realm.getDefaultInstance()
+        val config = RealmConfiguration.Builder()
+            .name("Schedule.realm")
+            .schemaVersion(2)
+            .build()
+
+        realm = Realm.getInstance(config)
 
         scheduleId = intent?.getLongExtra("schedule_id", -1L)?:0L
         if(scheduleId != -1L){
@@ -94,7 +86,6 @@ class ScheduleEditActivity : AppCompatActivity() {
                         if (date != null) schedule.date = date
                         schedule.title = titleEdit.text.toString()
                         schedule.detail = detailEdit.text.toString()
-                        schedule.detail = "test"
                     }
                 }
                 else -> {
@@ -109,7 +100,6 @@ class ScheduleEditActivity : AppCompatActivity() {
                     }
                 }
             }
-            //val intent = Intent(this,MainActivity::class.java)
             setResult(100,intent)
             finish()
             true

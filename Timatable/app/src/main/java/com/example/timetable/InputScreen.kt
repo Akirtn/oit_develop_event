@@ -9,12 +9,15 @@ import android.text.util.Linkify
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.timetable.model.CellDataEntity
+import com.example.timetable.model.Schedule
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.kotlin.createObject
+import io.realm.kotlin.where
 import petrov.kristiyan.colorpicker.ColorPicker
 import petrov.kristiyan.colorpicker.ColorPicker.OnChooseColorListener
 
@@ -28,42 +31,63 @@ class InputScreen : AppCompatActivity() {
     private lateinit var periodText: Spinner
     private lateinit var syllabusLinkText: TextView
     private lateinit var colorChangeButton: Button
-    private lateinit var receiveCellData: CellDataEntity
-
+    private var id: Int = 0
+    private var x: Int = 0
+    private var y: Int = 1
     private var link:String = ""
+    private var color: Int = Color.parseColor("#ff7f7f")
+    private var isScheduleEmpty : Int = 0
 
+    private lateinit var realm: Realm
 
-    private var colorChangeButtonBackColor: Int = 0
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_input_screen)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
+    private fun setViewId(){
         subjectNameText = findViewById(R.id.subject_name)
         classNumberText = findViewById(R.id.class_number)
         teacherNameText = findViewById(R.id.teacher_name)
         periodText = findViewById(R.id.period)
         syllabusLinkText = findViewById(R.id.syllabus_link)
         colorChangeButton = findViewById(R.id.color_change_button)
+    }
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContentView(R.layout.activity_input_screen)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        setViewId()
 
         //スピリットの設定
         val periodAdapter = ArrayAdapter.createFromResource(this, R.array.spinnerArray, R.layout.period_spinner)
         periodAdapter.setDropDownViewResource(R.layout.period_spinner_dropdown)
         periodText.adapter = periodAdapter
 
+        x = intent.getIntExtra("x",0)
+        y = intent.getIntExtra("y",0)
+        isScheduleEmpty = intent.getIntExtra("scheduleEmptyFlag",1)
 
-        receiveCellData = intent.getSerializableExtra("cellData") as CellDataEntity
+        id = x * 10 + y
 
+        val config = RealmConfiguration.Builder()
+            .name("CellDataEntity.realm")
+            .schemaVersion(1)
+            .build()
 
-        //インテントの中身をテキストエリアに代入
-        subjectNameText.setText(receiveCellData.subjectName)
-        classNumberText.setText(receiveCellData.classNumber)
-        teacherNameText.setText(receiveCellData.teacherName)
-        periodText.setSelection((receiveCellData.period?:"0").toIntOrNull()?:0)
-        syllabusLinkText.text = receiveCellData.syllabusLink
+        realm = Realm.getInstance(config)
 
-        colorChangeButtonBackColor = Color.parseColor(receiveCellData.color)
+        if(isScheduleEmpty == 0){
+            val cell = realm.where<CellDataEntity>()
+                .equalTo("id",id).findFirst()
+
+            subjectNameText.setText(cell?.subjectName)
+            classNumberText.setText(cell?.classNumber)
+            teacherNameText.setText(cell?.teacherName)
+            periodText.setSelection((cell?.period)?:0)
+            syllabusLinkText.text = cell?.syllabusLink
+            color = (cell?.color)?:Color.parseColor("#ffffff")
+        }
 
         //科目名の入力サジェスト設定
         val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
@@ -84,7 +108,6 @@ class InputScreen : AppCompatActivity() {
         }
 
         //戻るボタンが押されたときに時間割が消えるのを防ぐための処理
-        intent.putExtra("cellData", receiveCellData)
         setResult(Activity.RESULT_OK,intent)
 
         //シラバス検索ボタン
@@ -101,7 +124,6 @@ class InputScreen : AppCompatActivity() {
                     .show()
             }
         }
-
 
         //色検索ボタン
         this.colorChangeButton.setOnClickListener{
@@ -128,14 +150,12 @@ class InputScreen : AppCompatActivity() {
             colorPicker.show()
 
             colorPicker.setOnChooseColorListener(object : OnChooseColorListener {
-                override fun onChooseColor(position: Int, color: Int) {
-                    if (color != 0){
-                        colorChangeButtonBackColor = color
+                override fun onChooseColor(position: Int, chooseColor: Int) {
+                    if (chooseColor != 0){
+                        color = chooseColor
                     }
                 }
-                override fun onCancel() {
-
-                }
+                override fun onCancel() {}
             })
         }
 
@@ -143,7 +163,6 @@ class InputScreen : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -152,11 +171,11 @@ class InputScreen : AppCompatActivity() {
         R.id.action_delete -> {
             // User chose the "Settings" item, show the app settings UI...
             setResult(-2,intent)
-            if(scheduleEntity == null){
-                finish()
+            realm.executeTransaction{ db: Realm ->
+                db.where<CellDataEntity>().equalTo("id", id)
+                    ?.findFirst()
+                    ?.deleteFromRealm()
             }
-            scheduleList.remove(scheduleEntity)
-            deleteData(receiveCellData.x,receiveCellData.y)
             finish()
             true
         }
@@ -164,32 +183,54 @@ class InputScreen : AppCompatActivity() {
         R.id.action_save -> {
             // User chose the "Settings" item, show the app settings UI...
             if(subjectNameText.text.isNotEmpty()){
-                val sendCellData = CellDataEntity(receiveCellData.x,
-                    receiveCellData.y,
-                    subjectNameText.text.toString(),
-                    classNumberText.text.toString(),
-                    teacherNameText.text.toString(),
-                    periodText.selectedItemPosition.toString(),
-                    link,
-                    String.format("#%06X", 0xFFFFFF and colorChangeButtonBackColor)
-                )
-                intent.putExtra("cellData", sendCellData)
-                setResult(100,intent)
 
+                when(isScheduleEmpty){
+                    1 -> {
+                        //データベースにデータ登録
+                        realm.executeTransaction { db: Realm ->
+                            val cellDataTmp = db.createObject<CellDataEntity>(id)
+                            cellDataTmp.x = x
+                            cellDataTmp.y = y
+                            cellDataTmp.subjectName = subjectNameText.text.toString()
+                            cellDataTmp.classNumber = classNumberText.text.toString()
+                            cellDataTmp.teacherName = teacherNameText.text.toString()
+                            cellDataTmp.period = periodText.selectedItemPosition
+                            cellDataTmp.syllabusLink = syllabusLinkText.text.toString()
+                            cellDataTmp.color = color
+                        }
+                    }
+                    0 -> {
+                        //データベース更新
+                        realm.executeTransaction { db: Realm ->
+                            val cellDataTmp = db.where<CellDataEntity>()
+                                .equalTo("id",id).findFirst()
+                            cellDataTmp?.x = x
+                            cellDataTmp?.y = y
+                            cellDataTmp?.subjectName = subjectNameText.text.toString()
+                            cellDataTmp?.classNumber = classNumberText.text.toString()
+                            cellDataTmp?.teacherName = teacherNameText.text.toString()
+                            cellDataTmp?.period = periodText.selectedItemPosition
+                            cellDataTmp?.syllabusLink = syllabusLinkText.text.toString()
+                            cellDataTmp?.color = color
+                        }
+                    }
+                }
+                setResult(100,intent)
             }else{
                 setResult(Activity.RESULT_CANCELED,intent)
             }
             finish()
             true
         }
-
         else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
             setResult(-3,intent)
             finish()
             super.onOptionsItemSelected(item)
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
+    }
 }
