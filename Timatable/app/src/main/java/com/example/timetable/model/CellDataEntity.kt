@@ -3,8 +3,6 @@ package com.example.timetable.model
 import android.graphics.Color
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import io.realm.annotations.RealmModule
-
 
 open class CellDataEntity : RealmObject() {
     @PrimaryKey

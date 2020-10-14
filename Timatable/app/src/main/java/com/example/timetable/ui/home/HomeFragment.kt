@@ -34,8 +34,6 @@ class HomeFragment : Fragment() {
       ViewModelProviders.of(this).get(HomeViewModel::class.java)
     val root = inflater.inflate(R.layout.fragment_home, container, false)
 
-
-
     val t = root.findViewById<MinTimeTableView>(R.id.table)
 
     t.setOnTimeCellClickListener(object : OnTimeCellClickListener{

@@ -31,6 +31,7 @@ class InputScreen : AppCompatActivity() {
     private lateinit var periodText: Spinner
     private lateinit var syllabusLinkText: TextView
     private lateinit var colorChangeButton: Button
+
     private var id: Int = 0
     private var x: Int = 0
     private var y: Int = 1
@@ -40,24 +41,18 @@ class InputScreen : AppCompatActivity() {
 
     private lateinit var realm: Realm
 
-    private fun setViewId(){
-        subjectNameText = findViewById(R.id.subject_name)
-        classNumberText = findViewById(R.id.class_number)
-        teacherNameText = findViewById(R.id.teacher_name)
-        periodText = findViewById(R.id.period)
-        syllabusLinkText = findViewById(R.id.syllabus_link)
-        colorChangeButton = findViewById(R.id.color_change_button)
-    }
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_input_screen)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        setViewId()
+        subjectNameText = findViewById(R.id.subject_name)
+        classNumberText = findViewById(R.id.class_number)
+        teacherNameText = findViewById(R.id.teacher_name)
+        periodText = findViewById(R.id.period)
+        syllabusLinkText = findViewById(R.id.syllabus_link)
+        colorChangeButton = findViewById(R.id.color_change_button)
 
         //スピリットの設定
         val periodAdapter = ArrayAdapter.createFromResource(this, R.array.spinnerArray, R.layout.period_spinner)
@@ -169,7 +164,6 @@ class InputScreen : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_delete -> {
-            // User chose the "Settings" item, show the app settings UI...
             setResult(-2,intent)
             realm.executeTransaction{ db: Realm ->
                 db.where<CellDataEntity>().equalTo("id", id)
@@ -181,9 +175,7 @@ class InputScreen : AppCompatActivity() {
         }
 
         R.id.action_save -> {
-            // User chose the "Settings" item, show the app settings UI...
             if(subjectNameText.text.isNotEmpty()){
-
                 when(isScheduleEmpty){
                     1 -> {
                         //データベースにデータ登録
@@ -195,7 +187,7 @@ class InputScreen : AppCompatActivity() {
                             cellDataTmp.classNumber = classNumberText.text.toString()
                             cellDataTmp.teacherName = teacherNameText.text.toString()
                             cellDataTmp.period = periodText.selectedItemPosition
-                            cellDataTmp.syllabusLink = syllabusLinkText.text.toString()
+                            cellDataTmp.syllabusLink = link
                             cellDataTmp.color = color
                         }
                     }
@@ -210,7 +202,7 @@ class InputScreen : AppCompatActivity() {
                             cellDataTmp?.classNumber = classNumberText.text.toString()
                             cellDataTmp?.teacherName = teacherNameText.text.toString()
                             cellDataTmp?.period = periodText.selectedItemPosition
-                            cellDataTmp?.syllabusLink = syllabusLinkText.text.toString()
+                            cellDataTmp?.syllabusLink = link
                             cellDataTmp?.color = color
                         }
                     }
