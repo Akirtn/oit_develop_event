@@ -2,14 +2,13 @@ package com.example.timetable.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.timetable.*
-import com.example.timetable.model.CellDataEntity
+import com.example.timetable.model.CellData
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
@@ -78,7 +77,7 @@ class HomeFragment : Fragment() {
       .build()
 
     realm = Realm.getInstance(config)
-    val cells = realm.where<CellDataEntity>().findAll()
+    val cells = realm.where<CellData>().findAll()
 
     scheduleList.clear()
 

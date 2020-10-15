@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.timetable.model.CellDataEntity
-import com.example.timetable.model.Schedule
+import com.example.timetable.model.CellData
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -31,6 +29,7 @@ class InputScreen : AppCompatActivity() {
     private lateinit var periodText: Spinner
     private lateinit var syllabusLinkText: TextView
     private lateinit var colorChangeButton: Button
+    private lateinit var textDetail: EditText
 
     private var id: Int = 0
     private var x: Int = 0
@@ -53,6 +52,7 @@ class InputScreen : AppCompatActivity() {
         periodText = findViewById(R.id.period)
         syllabusLinkText = findViewById(R.id.syllabus_link)
         colorChangeButton = findViewById(R.id.color_change_button)
+        textDetail = findViewById(R.id.text_detail)
 
         //スピリットの設定
         val periodAdapter = ArrayAdapter.createFromResource(this, R.array.spinnerArray, R.layout.period_spinner)
@@ -73,7 +73,7 @@ class InputScreen : AppCompatActivity() {
         realm = Realm.getInstance(config)
 
         if(isScheduleEmpty == 0){
-            val cell = realm.where<CellDataEntity>()
+            val cell = realm.where<CellData>()
                 .equalTo("id",id).findFirst()
 
             subjectNameText.setText(cell?.subjectName)
@@ -82,6 +82,7 @@ class InputScreen : AppCompatActivity() {
             periodText.setSelection((cell?.period)?:0)
             syllabusLinkText.text = cell?.syllabusLink
             color = (cell?.color)?:Color.parseColor("#ffffff")
+            textDetail.setText(cell?.detail)
         }
 
         //科目名の入力サジェスト設定
@@ -94,8 +95,8 @@ class InputScreen : AppCompatActivity() {
         teacherNameText.setAdapter(teacherNameAdapter)
         teacherNameText.threshold = 1
 
+        Linkify.addLinks(textDetail, Linkify.ALL)
         //シラバスをリンク化
-        Linkify.addLinks(syllabusLinkText, Linkify.ALL)
         if(syllabusLinkText.text.isNotEmpty()){
             syllabusLinkText.linksClickable = true
             syllabusLinkText.text = Html.fromHtml("<a href=${syllabusLinkText.text}>${subjectNameText.text}</a>")
@@ -166,7 +167,7 @@ class InputScreen : AppCompatActivity() {
         R.id.action_delete -> {
             setResult(-2,intent)
             realm.executeTransaction{ db: Realm ->
-                db.where<CellDataEntity>().equalTo("id", id)
+                db.where<CellData>().equalTo("id", id)
                     ?.findFirst()
                     ?.deleteFromRealm()
             }
@@ -180,7 +181,7 @@ class InputScreen : AppCompatActivity() {
                     1 -> {
                         //データベースにデータ登録
                         realm.executeTransaction { db: Realm ->
-                            val cellDataTmp = db.createObject<CellDataEntity>(id)
+                            val cellDataTmp = db.createObject<CellData>(id)
                             cellDataTmp.x = x
                             cellDataTmp.y = y
                             cellDataTmp.subjectName = subjectNameText.text.toString()
@@ -189,12 +190,14 @@ class InputScreen : AppCompatActivity() {
                             cellDataTmp.period = periodText.selectedItemPosition
                             cellDataTmp.syllabusLink = link
                             cellDataTmp.color = color
+                            cellDataTmp.detail = textDetail.text.toString()
                         }
+                        Linkify.addLinks(textDetail, Linkify.ALL)
                     }
                     0 -> {
                         //データベース更新
                         realm.executeTransaction { db: Realm ->
-                            val cellDataTmp = db.where<CellDataEntity>()
+                            val cellDataTmp = db.where<CellData>()
                                 .equalTo("id",id).findFirst()
                             cellDataTmp?.x = x
                             cellDataTmp?.y = y
@@ -204,7 +207,9 @@ class InputScreen : AppCompatActivity() {
                             cellDataTmp?.period = periodText.selectedItemPosition
                             cellDataTmp?.syllabusLink = link
                             cellDataTmp?.color = color
+                            cellDataTmp?.detail = textDetail.text.toString()
                         }
+                        Linkify.addLinks(textDetail, Linkify.ALL)
                     }
                 }
                 setResult(100,intent)
