@@ -34,7 +34,7 @@ fun loadCSV(assetManager: AssetManager){
     //csv読み込み
     val inputStream= assetManager.open("syllabus_database_3.csv")
     val inputStreamReader = InputStreamReader(inputStream)
-    var bufferedReader = BufferedReader(inputStreamReader)
+    val bufferedReader = BufferedReader(inputStreamReader)
     var line: String? = bufferedReader.readLine()
     while (line != null){
         val rowData = line.split(',')
