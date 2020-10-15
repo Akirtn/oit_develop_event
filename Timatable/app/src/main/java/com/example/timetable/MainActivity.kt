@@ -1,10 +1,7 @@
 package com.example.timetable
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -13,17 +10,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.timetable.model.CellDataEntity
+import com.example.timetable.model.CellData
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.islandparadise14.mintable.model.ScheduleEntity
-import io.realm.Realm
-import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_task_list.*
 import java.io.Serializable
 
 val scheduleList: ArrayList<ScheduleEntity> = ArrayList()
@@ -83,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
         val serializable: Serializable? = intent?.getSerializableExtra("cellData")
         if (serializable != null){
-            val cellData: CellDataEntity? = serializable as CellDataEntity
+            val cellData: CellData? = serializable as CellData
             if (resultCode == 100) {
 
                 Snackbar.make(nav_view, "保存しました", Snackbar.LENGTH_LONG)
