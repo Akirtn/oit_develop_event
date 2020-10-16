@@ -25,9 +25,9 @@
     <string name="color_change_button">色変更</string>
     <string name="text_detail">詳細</string>
 
-    <string name="schedule_day">日付：</string>
-    <string name="schedule_title">タイトル：</string>
-    <string name="schedule_dedail">詳細：</string>
+    <string name="schedule_day">日付</string>
+    <string name="schedule_title">タイトル</string>
+    <string name="schedule_dedail">詳細</string>
 
 
     <string-array name="spinnerArray">
