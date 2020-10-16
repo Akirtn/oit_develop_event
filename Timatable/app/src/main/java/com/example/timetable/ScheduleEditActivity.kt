@@ -1,10 +1,13 @@
 package com.example.timetable
 
+import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.DatePicker
 import com.example.timetable.model.Schedule
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -16,7 +19,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ScheduleEditActivity : AppCompatActivity() {
+class ScheduleEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
     private lateinit var realm: Realm
 
     private var scheduleId = 0L
@@ -46,6 +49,12 @@ class ScheduleEditActivity : AppCompatActivity() {
         val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
         titleEdit.setAdapter(subjectNameAdapter)
         titleEdit.threshold = 1
+
+        val dateButton = findViewById<Button>(R.id.schedule_date_button)
+        dateButton.setOnClickListener{
+            val datePickerFragment = DatePick()
+            datePickerFragment.show(supportFragmentManager, "datePicker")
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -123,5 +132,10 @@ class ScheduleEditActivity : AppCompatActivity() {
         }catch (e: ParseException){
             return null
         }
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val str = String.format(Locale.US, "%d/%d/%d", year, month+1, dayOfMonth)
+        dateEdit.setText(str)
     }
 }
