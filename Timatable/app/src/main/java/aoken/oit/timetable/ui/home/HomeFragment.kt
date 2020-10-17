@@ -1,4 +1,4 @@
-package com.example.timetable.ui.home
+package aoken.oit.timetable.ui.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.example.timetable.*
-import com.example.timetable.model.CellData
+import aoken.oit.timetable.InputScreen
+import aoken.oit.timetable.cellHeight
+import aoken.oit.timetable.day
+import aoken.oit.timetable.*
+import aoken.oit.timetable.model.CellData
+import aoken.oit.timetable.scheduleList
 import com.islandparadise14.mintable.MinTimeTableView
 import com.islandparadise14.mintable.model.ScheduleEntity
 import com.islandparadise14.mintable.tableinterface.OnScheduleClickListener
@@ -40,7 +44,7 @@ class HomeFragment : Fragment() {
 
         //入力画面に遷移
 
-        val intent = Intent(activity,InputScreen::class.java)
+        val intent = Intent(activity, InputScreen::class.java)
         intent.putExtra("x",scheduleDay)
         intent.putExtra("y", time)
         intent.putExtra("scheduleEmptyFlag", 1)
@@ -55,7 +59,7 @@ class HomeFragment : Fragment() {
 
           val time = entity.startTime.split(":")
 
-          val intent = Intent(activity,InputScreen::class.java)
+          val intent = Intent(activity, InputScreen::class.java)
 
           intent.putExtra("x", entity.scheduleDay)
           intent.putExtra("y", time[0].toInt())

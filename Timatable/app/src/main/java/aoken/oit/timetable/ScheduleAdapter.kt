@@ -1,4 +1,4 @@
-package com.example.timetable
+package aoken.oit.timetable
 
 import io.realm.OrderedRealmCollection
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.timetable.model.Schedule
+import aoken.oit.timetable.model.Schedule
 import io.realm.RealmRecyclerViewAdapter
 
 class ScheduleAdapter(data: OrderedRealmCollection<Schedule>) :
@@ -27,13 +27,13 @@ class ScheduleAdapter(data: OrderedRealmCollection<Schedule>) :
         val title: TextView = cell.findViewById(android.R.id.text2)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScheduleAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(android.R.layout.simple_list_item_2,parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ScheduleAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val schedule: Schedule? = getItem(position)
         holder.date.text = android.text.format.DateFormat.format("yyyy/MM/dd", schedule?.date)
         holder.title.text = schedule?.title

@@ -1,4 +1,4 @@
-package com.example.timetable.ui.kitayamaBus
+package aoken.oit.timetable.ui.kitayamaBus
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

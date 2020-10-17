@@ -1,4 +1,4 @@
-package com.example.timetable
+package aoken.oit.timetable
 
 import android.content.res.AssetManager
 import android.util.Log

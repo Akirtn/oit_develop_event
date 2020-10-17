@@ -1,4 +1,4 @@
-package com.example.timetable.model
+package aoken.oit.timetable.model
 
 import android.graphics.Color
 import io.realm.RealmObject
