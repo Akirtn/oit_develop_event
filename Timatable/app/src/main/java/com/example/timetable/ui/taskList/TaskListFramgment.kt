@@ -1,24 +1,21 @@
 package com.example.timetable.ui.taskList
 
-import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.timetable.*
-import com.example.timetable.ui.nagaoBus.NagaoBusViewModel
+import com.example.timetable.model.Schedule
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.islandparadise14.mintable.model.ScheduleEntity
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.kotlin.where
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_task_list.*
 
 class TaskListFragment : Fragment() {
@@ -48,7 +45,14 @@ class TaskListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        realm = Realm.getDefaultInstance()
+        val config = RealmConfiguration.Builder()
+            .name("Schedule.realm")
+            .schemaVersion(2)
+            //.modules(CellDataEntity())
+            .build()
+        //Realm.setDefaultConfiguration(realmConfig) // 上記の設定をRealmにセット
+
+        realm = Realm.getInstance(config)
         list.layoutManager = LinearLayoutManager(context)
         val schedules = realm.where<Schedule>().findAll()
         val adapter = ScheduleAdapter(schedules)

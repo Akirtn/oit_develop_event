@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.timetable.model.Schedule
 import io.realm.RealmRecyclerViewAdapter
 
 class ScheduleAdapter(data: OrderedRealmCollection<Schedule>) :

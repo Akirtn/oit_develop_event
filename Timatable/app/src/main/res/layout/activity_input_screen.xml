@@ -60,15 +60,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/period_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
             android:text="@string/period_textView"
             android:textSize="18sp" />
 
@@ -84,27 +84,50 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView7"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/syllabus_link"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="32dp"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/find_syllabus_button"
+                app:srcCompat="@drawable/ic_baseline_find_in_page" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|left"
+                android:layout_marginStart="40dp"
+                android:gravity="center"
+                android:text="@string/find_syllabus_button"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/find_syllabus_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button"
+                android:gravity="center"
+                android:hint="@string/find_syllabus_margen"
+                android:textSize="18sp" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/syllabus_link"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:gravity="center|left"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -112,6 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="10dp">
 
         <ImageView
@@ -134,42 +158,36 @@
             android:id="@+id/color_change_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@drawable/bg_button_normal"
             android:gravity="center" />
+
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/imageView6"
             android:layout_width="32dp"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/find_syllabus_button"
-            app:srcCompat="@drawable/ic_baseline_find_in_page" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_baseline_notes" />
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="40dp"
-            android:gravity="center"
-            android:text="@string/find_syllabus_button"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/find_syllabus_button"
+        <AutoCompleteTextView
+            android:id="@+id/text_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button"
-            android:gravity="center" />
-    </FrameLayout>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="@string/text_detail"
+            android:inputType="textMultiLine|text"
+            tools:ignore="LabelFor" />
+    </LinearLayout>
 
 
 </LinearLayout>

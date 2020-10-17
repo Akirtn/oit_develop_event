@@ -3,7 +3,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Oit Time Table</string>
-    <string name="nav_header_subtitle">version 0.0.1</string>
+    <string name="nav_header_subtitle">version 1.0.0</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_delete">Delete</string>
     <string name="action_save">Save</string>
@@ -16,16 +16,18 @@
     <string name="subject_name_textView">科目名</string>
     <string name="class_number_textView">教室番号</string>
     <string name="teacher_name_textView">教員名</string>
-    <string name="period_textView">学期</string>
+    <string name="period_textView">学期：</string>
     <string name="syllabus_link">シラバス：</string>
-    <string name="find_syllabus_button">シラバス検索</string>
+    <string name="find_syllabus_button">シラバス検索：</string>
+    <string name="find_syllabus_margen">　　　　　　　</string>
     <string name="save_button">保存</string>
     <string name="delete_button">削除</string>
     <string name="color_change_button">色変更</string>
+    <string name="text_detail">詳細</string>
 
-    <string name="schedule_day">日付：</string>
-    <string name="schedule_title">タイトル：</string>
-    <string name="schedule_dedail">詳細：</string>
+    <string name="schedule_day">日付</string>
+    <string name="schedule_title">タイトル</string>
+    <string name="schedule_dedail">詳細</string>
 
 
     <string-array name="spinnerArray">
