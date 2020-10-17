@@ -3,6 +3,7 @@ package com.example.timetable
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.util.Linkify
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
@@ -43,6 +44,7 @@ class ScheduleEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
             dateEdit.setText(android.text.format.DateFormat.format("yyyy/MM/dd", schedule?.date))
             titleEdit.setText(schedule?.title)
             detailEdit.setText(schedule?.detail)
+            Linkify.addLinks(detailEdit, Linkify.ALL)
         }
 
         //科目名の入力サジェスト設定
