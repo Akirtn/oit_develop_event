@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class NagaoBusFragment : Fragment() {
     val webView = root.findViewById<WebView>(R.id.nagaoWebView)
     webView.webViewClient = WebViewClient();
     webView.settings.javaScriptEnabled = true
+    webView.settings.cacheMode = WebSettings.LOAD_DEFAULT
 
     val progressDialog = ProgressDialog(root.context);
     progressDialog.setMessage("Loading...");
