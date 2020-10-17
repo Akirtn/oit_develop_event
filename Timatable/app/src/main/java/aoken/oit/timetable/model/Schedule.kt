@@ -1,4 +1,4 @@
-package com.example.timetable.model
+package aoken.oit.timetable.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

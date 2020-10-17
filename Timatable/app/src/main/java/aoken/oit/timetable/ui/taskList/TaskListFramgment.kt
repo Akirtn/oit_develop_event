@@ -1,17 +1,17 @@
-package com.example.timetable.ui.taskList
+package aoken.oit.timetable.ui.taskList
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.timetable.*
-import com.example.timetable.model.Schedule
+import aoken.oit.timetable.ScheduleAdapter
+import aoken.oit.timetable.ScheduleEditActivity
+import aoken.oit.timetable.*
+import aoken.oit.timetable.model.Schedule
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
 import io.realm.RealmConfiguration

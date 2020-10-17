@@ -1,4 +1,4 @@
-package com.example.timetable
+package aoken.oit.timetable
 
 import android.app.Activity
 import android.graphics.Color
@@ -10,7 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.timetable.model.CellData
+import aoken.oit.timetable.model.CellData
 import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -86,12 +86,16 @@ class InputScreen : AppCompatActivity() {
         }
 
         //科目名の入力サジェスト設定
-        val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
+        val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,
+            getColumn(0)
+        )
         subjectNameText.setAdapter(subjectNameAdapter)
         subjectNameText.threshold = 1
 
         //教師名の入力サジェスト設定
-        val teacherNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(4))
+        val teacherNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,
+            getColumn(4)
+        )
         teacherNameText.setAdapter(teacherNameAdapter)
         teacherNameText.threshold = 1
 
@@ -109,8 +113,10 @@ class InputScreen : AppCompatActivity() {
         //シラバス検索ボタン
         val findSyllabusButton = findViewById<Button>(R.id.find_syllabus_button)
         findSyllabusButton.setOnClickListener{
-            link = findLink(subjectNameText.text.toString(),
-                teacherNameText.text.toString(), periodText.getSelectedItem().toString())
+            link = findLink(
+                subjectNameText.text.toString(),
+                teacherNameText.text.toString(), periodText.getSelectedItem().toString()
+            )
             if(link != "not found"){
                 syllabusLinkText.linksClickable = true
                 syllabusLinkText.text = Html.fromHtml("<a href=$link>${subjectNameText.text}</a>")

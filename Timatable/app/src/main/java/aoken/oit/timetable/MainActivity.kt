@@ -1,4 +1,4 @@
-package com.example.timetable
+package aoken.oit.timetable
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.timetable.model.CellData
+import aoken.oit.timetable.model.CellData
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.islandparadise14.mintable.model.ScheduleEntity

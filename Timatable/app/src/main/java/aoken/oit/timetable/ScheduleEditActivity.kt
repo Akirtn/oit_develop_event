@@ -1,4 +1,4 @@
-package com.example.timetable
+package aoken.oit.timetable
 
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
-import com.example.timetable.model.Schedule
+import aoken.oit.timetable.model.Schedule
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.kotlin.createObject
@@ -48,7 +48,9 @@ class ScheduleEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         }
 
         //科目名の入力サジェスト設定
-        val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, getColumn(0))
+        val subjectNameAdapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,
+            getColumn(0)
+        )
         titleEdit.setAdapter(subjectNameAdapter)
         titleEdit.threshold = 1
 
